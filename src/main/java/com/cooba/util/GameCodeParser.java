@@ -3,7 +3,9 @@ package com.cooba.util;
 import com.cooba.object.GameInfo;
 import com.cooba.object.PlayParameter;
 import com.cooba.enums.ColorEnum;
+import org.springframework.stereotype.Component;
 
+@Component
 public class GameCodeParser {
 
     public GameInfo parse(String gameCode) {

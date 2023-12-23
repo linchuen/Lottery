@@ -6,10 +6,11 @@ import com.cooba.object.LoseResult;
 import com.cooba.object.PlayParameter;
 import com.cooba.object.PlayResult;
 import com.cooba.object.WinResult;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Stream;
-
+@Component
 public class ColorRule implements PlayRule {
     private final List<Integer> redBalls = Stream.of(1, 2, 7, 8, 12, 13, 18, 19, 23, 24, 29, 30, 34, 35, 40, 45, 46).toList();
     private final List<Integer> blueBalls = Stream.of(3, 4, 9, 10, 14, 15, 20, 25, 26, 31, 36, 37, 41, 42, 47, 48).toList();

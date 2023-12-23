@@ -5,6 +5,7 @@ import com.cooba.enums.GameRuleEnum;
 import com.cooba.enums.LotteryEnum;
 import com.cooba.object.PlayParameter;
 import com.cooba.object.PlayResult;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
  * 自選n不中
  * 色波
  */
+@Component
 public class MarkSixLottery implements Lottery {
     private final List<PlayRule> playRules;
     private final Map<GameRuleEnum, PlayRule> playRuleMap;

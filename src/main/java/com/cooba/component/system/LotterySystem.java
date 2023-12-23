@@ -7,7 +7,9 @@ import com.cooba.object.GameInfo;
 import com.cooba.object.SettleResult;
 import com.cooba.util.GameCodeParser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@Component
 @RequiredArgsConstructor
 public class LotterySystem implements System {
     private final LotteryFactory lotteryFactory;

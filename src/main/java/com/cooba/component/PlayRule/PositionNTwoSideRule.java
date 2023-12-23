@@ -5,9 +5,10 @@ import com.cooba.enums.GameRuleEnum;
 import com.cooba.object.PlayParameter;
 import com.cooba.object.PlayResult;
 import com.cooba.object.TieResult;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
-
+@Component
 public class PositionNTwoSideRule implements PlayRule {
     @Override
     public PlayResult decideResult(List<Integer> winningNumbers, List<Integer> guessNumbers, PlayParameter playParameter) {

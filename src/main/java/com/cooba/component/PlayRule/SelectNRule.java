@@ -5,10 +5,11 @@ import com.cooba.object.LoseResult;
 import com.cooba.object.PlayParameter;
 import com.cooba.object.PlayResult;
 import com.cooba.object.WinResult;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.List;
-
+@Component
 public class SelectNRule implements PlayRule {
     @Override
     public PlayResult decideResult(List<Integer> winningNumbers, List<Integer> guessNumbers, PlayParameter playParameter) {

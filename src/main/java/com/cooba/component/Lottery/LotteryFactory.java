@@ -11,6 +11,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Getter
+@Component
 public class LotteryFactory {
     private final Map<Integer, Lottery> lotteryIdMap;
     private final Map<LotteryEnum, Lottery> lotteryMap;
