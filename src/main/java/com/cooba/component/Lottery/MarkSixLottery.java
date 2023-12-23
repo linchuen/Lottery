@@ -2,6 +2,7 @@ package com.cooba.component.Lottery;
 
 import com.cooba.component.PlayRule.PlayRule;
 import com.cooba.enums.GameRuleEnum;
+import com.cooba.enums.LotteryEnum;
 import com.cooba.object.PlayParameter;
 import com.cooba.object.PlayResult;
 
@@ -41,5 +42,8 @@ public class MarkSixLottery implements Lottery {
         return playRule.decideResult(winningNumbers, guessNumbers, playParameter);
     }
 
-
+    @Override
+    public LotteryEnum getLotteryEnum() {
+        return LotteryEnum.MarkSix;
+    }
 }
