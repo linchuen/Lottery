@@ -1,6 +1,6 @@
 package com.cooba.component.PlayRule;
 
-import com.cooba.common.TwoSideCommonMethod;
+import com.cooba.method.TwoSideCommonMethod;
 import com.cooba.enums.GameRuleEnum;
 import com.cooba.object.PlayParameter;
 import com.cooba.object.PlayResult;

@@ -1,4 +1,4 @@
-package com.cooba.common;
+package com.cooba.method;
 
 import com.cooba.object.LoseResult;
 import com.cooba.object.PlayResult;
