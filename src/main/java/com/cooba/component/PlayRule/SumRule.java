@@ -3,7 +3,7 @@ package com.cooba.component.PlayRule;
 import com.cooba.enums.GameRuleEnum;
 import com.cooba.object.PlayParameter;
 import com.cooba.object.PlayResult;
-import com.cooba.method.TwoSideCommonMethod;
+import com.cooba.component.PlayRule.common.TwoSideCommonMethod;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

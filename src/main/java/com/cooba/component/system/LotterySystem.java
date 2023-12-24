@@ -2,14 +2,13 @@ package com.cooba.component.system;
 
 import com.cooba.component.Lottery.Lottery;
 import com.cooba.component.Lottery.LotteryFactory;
+import com.cooba.component.Wallet.Wallet;
 import com.cooba.entity.OrderEntity;
 import com.cooba.enums.GameRuleEnum;
 import com.cooba.enums.GameStatusEnum;
 import com.cooba.enums.OrderStatusEnum;
-import com.cooba.object.GameInfo;
-import com.cooba.object.PlayParameter;
-import com.cooba.object.PlayResult;
-import com.cooba.object.SettleResult;
+import com.cooba.object.*;
+import com.cooba.repository.OrderRepository;
 import com.cooba.util.GameCodeUtility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -22,6 +21,8 @@ import java.util.List;
 public class LotterySystem implements Admin {
     private final LotteryFactory lotteryFactory;
     private final GameCodeUtility gameCodeUtility;
+    private final OrderRepository orderRepository;
+    private final Wallet wallet;
     private static final BigDecimal feeRate = new BigDecimal("0.02");
 
     @Override
@@ -38,7 +39,7 @@ public class LotterySystem implements Admin {
         GameRuleEnum gameRule = GameRuleEnum.getRuleById(gameRuleId).orElseThrow();
         PlayResult playResult = lottery.checkNumbers(gameRule, winningNumbers, guessNumbers, playParameter);
 
-        if (playResult.isTie()){
+        if (playResult.isTie()) {
             return SettleResult.builder()
                     .fee(BigDecimal.ZERO)
                     .betPrize(orderEntity.getBetAmount())
@@ -67,5 +68,23 @@ public class LotterySystem implements Admin {
                 .status(OrderStatusEnum.settle.getCode())
                 .gameStatus(GameStatusEnum.WIN.getCode())
                 .build();
+    }
+
+    @Override
+    public void settleOrders(WinningNumberInfo winningNumberInfo) {
+        int lotteryId = winningNumberInfo.getLotteryId();
+        long round = winningNumberInfo.getRound();
+        List<Integer> winningNumbers = winningNumberInfo.getWinningNumbers();
+
+        List<OrderEntity> unsettledOrders = orderRepository.selectUnsettleOrder(lotteryId, round);
+        for (OrderEntity unsettledOrder : unsettledOrders) {
+            SettleResult settleResult = calculateSettleResult(winningNumbers, unsettledOrder);
+            orderRepository.updateSettleOrder(settleResult);
+        }
+    }
+
+    @Override
+    public void sendLotteryPrize(int playerId, SettleResult settleResult) {
+        wallet.increaseAsset();
     }
 }
