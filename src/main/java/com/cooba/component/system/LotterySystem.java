@@ -35,7 +35,7 @@ public class LotterySystem implements Admin {
         PlayParameter playParameter = gameInfo.getPlayParameter();
 
         Lottery lottery = lotteryFactory.getLottery(lotteryId).orElseThrow();
-        GameRuleEnum gameRule = GameRuleEnum.getRuleById(gameRuleId);
+        GameRuleEnum gameRule = GameRuleEnum.getRuleById(gameRuleId).orElseThrow();
         PlayResult playResult = lottery.checkNumbers(gameRule, winningNumbers, guessNumbers, playParameter);
 
         if (playResult.isTie()){
@@ -52,7 +52,6 @@ public class LotterySystem implements Admin {
                     .fee(BigDecimal.ZERO)
                     .betPrize(BigDecimal.ZERO)
                     .status(OrderStatusEnum.settle.getCode())
-
                     .gameStatus(GameStatusEnum.LOSE.getCode())
                     .build();
         }

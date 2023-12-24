@@ -1,5 +1,7 @@
 package com.cooba.util;
 
+import com.cooba.enums.GameRuleEnum;
+import com.cooba.enums.LotteryEnum;
 import com.cooba.object.GameInfo;
 import com.cooba.object.PlayParameter;
 import com.cooba.enums.ColorEnum;
@@ -28,5 +30,25 @@ public class GameCodeUtility {
                         .color(color == 0 ? null : ColorEnum.getColorById(color))
                         .build())
                 .build();
+    }
+
+    public String getLotteryCode(LotteryEnum lotteryEnum) {
+        return String.format("%03d", lotteryEnum.getId());
+    }
+
+    public String getRuleCode(GameRuleEnum gameRuleEnum) {
+        return String.format("%04d", gameRuleEnum.getId());
+    }
+
+    public String getPositionCode(int position) {
+        return position == 0 ? null : String.format("%02d", position);
+    }
+
+    public String getIsBigCode(Boolean isBig) {
+        return isBig == null ? "2" : isBig ? "1" : "0";
+    }
+
+    public String getIsOddCode(Boolean isOdd) {
+        return isOdd == null ? "2" : isOdd ? "1" : "0";
     }
 }

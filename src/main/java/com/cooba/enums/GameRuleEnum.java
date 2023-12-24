@@ -4,6 +4,7 @@ import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Getter
 public enum GameRuleEnum {
@@ -28,7 +29,7 @@ public enum GameRuleEnum {
 
     }
 
-    public static GameRuleEnum getRuleById(int id) {
-        return ruleEnumMap.get(id);
+    public static Optional<GameRuleEnum> getRuleById(int id) {
+        return Optional.ofNullable(ruleEnumMap.get(id));
     }
 }
