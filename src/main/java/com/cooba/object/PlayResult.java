@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 public class PlayResult {
     private boolean isWin;
     private BigDecimal betOdds;
+    private boolean isTie;
 
     public PlayResult() {
         this.betOdds = BigDecimal.ZERO;

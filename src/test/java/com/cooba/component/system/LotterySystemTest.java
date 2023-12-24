@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Collections;
 import java.util.NoSuchElementException;
 
 @ExtendWith(SpringExtension.class)
@@ -23,6 +24,6 @@ class LotterySystemTest {
     void lotteryNotExist() {
         OrderEntity testOrder = new OrderEntity();
         testOrder.setGameCode("000" + "0000" + "00" + "2" + "2" + "00");
-        Assertions.assertThrows(NoSuchElementException.class, () -> lotterySystem.settleOrder(testOrder));
+        Assertions.assertThrows(NoSuchElementException.class, () -> lotterySystem.calculateSettleResult(Collections.emptyList(), testOrder));
     }
 }
