@@ -24,20 +24,38 @@ public class Guest implements Player {
         OrderEntity newOrder = order.generate(betRequest);
         if (!order.valid(newOrder)) {
             BetResult betResult = new BetResult();
+            betResult.setSuccess(false);
+            betResult.setErrorMessage("驗證失敗");
+            betResult.addBetRequestAttribute(betRequest);
             return betResult;
         }
 
         long orderId = orderRepository.insertNewOrder(newOrder);
 
-        Wallet wallet = walletFactory.getWallet(1).orElseThrow();
+        int walletId = betRequest.getWalletId();
         int assetId = betRequest.getAssetId();
         BigDecimal betAmount = betRequest.getBetAmount();
+
+        Wallet wallet = walletFactory.getWallet(walletId).orElseThrow();
         try {
             wallet.decreaseAsset(playerId, assetId, betAmount);
-        } catch (Exception e) {
             orderRepository.updatePayOrder(orderId);
+
+            BetResult betResult = new BetResult();
+            betResult.setOrderId(orderId);
+            betResult.setSuccess(true);
+            betResult.addBetRequestAttribute(betRequest);
+            return betResult;
+        } catch (Exception e) {
+            orderRepository.updateCancelOrder(orderId);
+
+            BetResult betResult = new BetResult();
+            betResult.setOrderId(orderId);
+            betResult.setSuccess(false);
+            betResult.setErrorMessage(e.getMessage());
+            betResult.addBetRequestAttribute(betRequest);
+            return betResult;
         }
-        BetResult betResult = new BetResult();
-        return betResult;
     }
+
 }

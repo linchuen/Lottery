@@ -72,4 +72,9 @@ public class FakeOrderRepository implements OrderRepository {
     public void updatePayOrder(long orderId) {
 
     }
+
+    @Override
+    public void updateCancelOrder(long orderId) {
+
+    }
 }

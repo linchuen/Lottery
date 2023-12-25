@@ -20,4 +20,6 @@ public interface OrderRepository {
     long insertNewOrder(OrderEntity orderEntity);
 
     void updatePayOrder(long orderId);
+
+    void updateCancelOrder(long orderId);
 }
