@@ -63,25 +63,28 @@ class LotterySystemTest {
     @Test
     void lotteryNotExist() {
         OrderEntity testOrder = new OrderEntity();
-        testOrder.setGameCode("000" + "0000" + "00" + "2" + "2" + "00");
+        String gameCode = gameCodeUtility.generate(null, null, null, null, null, null);
+        testOrder.setGameCode(gameCode);
         Assertions.assertThrows(NoSuchElementException.class, () -> lotterySystem.calculateSettleResult(Collections.emptyList(), testOrder));
     }
 
     @Test
     void gameRuleNotExist() {
         OrderEntity testOrder = new OrderEntity();
-        testOrder.setGameCode("001" + "0000" + "00" + "2" + "2" + "00");
+        String gameCode = gameCodeUtility.generate(LotteryEnum.MarkSix, null, null, null, null, null);
+        testOrder.setGameCode(gameCode);
         Assertions.assertThrows(NoSuchElementException.class, () -> lotterySystem.calculateSettleResult(Collections.emptyList(), testOrder));
     }
 
     @Test
     void testTieResult() {
-        String lotteryCode = gameCodeUtility.getLotteryCode(LotteryEnum.MarkSix);
-        String ruleCode = gameCodeUtility.getRuleCode(GameRuleEnum.PositionNTwoSide);
-        String positionCode = gameCodeUtility.getPositionCode(1);
+        String gameCode = gameCodeUtility.generate(LotteryEnum.MarkSix,
+                GameRuleEnum.PositionNTwoSide,
+                1,
+                null, null, null);
 
         OrderEntity testOrder = new OrderEntity();
-        testOrder.setGameCode(lotteryCode + ruleCode + positionCode + "2" + "2" + "00");
+        testOrder.setGameCode(gameCode);
         testOrder.setGuessNumbers(Collections.emptyList());
         List<Integer> winningNumbers = List.of(49, 1, 2, 3, 4, 5, 6);
 
@@ -92,13 +95,14 @@ class LotterySystemTest {
 
     @Test
     void testWinResult() {
-        String lotteryCode = gameCodeUtility.getLotteryCode(LotteryEnum.MarkSix);
-        String ruleCode = gameCodeUtility.getRuleCode(GameRuleEnum.PositionNTwoSide);
-        String positionCode = gameCodeUtility.getPositionCode(1);
-        String isBigCode = gameCodeUtility.getIsBigCode(true);
+        String gameCode = gameCodeUtility.generate(LotteryEnum.MarkSix,
+                GameRuleEnum.PositionNTwoSide,
+                1,
+                true,
+                null, null);
 
         OrderEntity testOrder = new OrderEntity();
-        testOrder.setGameCode(lotteryCode + ruleCode + positionCode + isBigCode + "2" + "00");
+        testOrder.setGameCode(gameCode);
         testOrder.setGuessNumbers(Collections.emptyList());
         testOrder.setBetAmount(BigDecimal.TEN);
         testOrder.setOdds(new BigDecimal("2"));
@@ -111,13 +115,14 @@ class LotterySystemTest {
 
     @Test
     void testLoseResult() {
-        String lotteryCode = gameCodeUtility.getLotteryCode(LotteryEnum.MarkSix);
-        String ruleCode = gameCodeUtility.getRuleCode(GameRuleEnum.PositionNTwoSide);
-        String positionCode = gameCodeUtility.getPositionCode(1);
-        String isBigCode = gameCodeUtility.getIsBigCode(false);
+        String gameCode = gameCodeUtility.generate(LotteryEnum.MarkSix,
+                GameRuleEnum.PositionNTwoSide,
+                1,
+                false,
+                null, null);
 
         OrderEntity testOrder = new OrderEntity();
-        testOrder.setGameCode(lotteryCode + ruleCode + positionCode + isBigCode + "2" + "00");
+        testOrder.setGameCode(gameCode);
         testOrder.setGuessNumbers(Collections.emptyList());
         testOrder.setBetAmount(BigDecimal.TEN);
         testOrder.setOdds(new BigDecimal("2"));

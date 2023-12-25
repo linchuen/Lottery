@@ -33,11 +33,11 @@ public class GameCodeUtility {
     }
 
     public String getLotteryCode(LotteryEnum lotteryEnum) {
-        return String.format("%03d", lotteryEnum.getId());
+        return lotteryEnum == null ? "000" : String.format("%03d", lotteryEnum.getId());
     }
 
     public String getRuleCode(GameRuleEnum gameRuleEnum) {
-        return String.format("%04d", gameRuleEnum.getId());
+        return gameRuleEnum == null ? "0000" : String.format("%04d", gameRuleEnum.getId());
     }
 
     public String getPositionCode(Integer position) {
@@ -53,10 +53,10 @@ public class GameCodeUtility {
     }
 
     public String getColorCode(ColorEnum colorEnum) {
-        return String.format("%02d", colorEnum.getId());
+        return colorEnum == null ? "00" : String.format("%02d", colorEnum.getId());
     }
 
-    public String generate(LotteryEnum lotteryEnum, GameRuleEnum gameRuleEnum, int position, Boolean isBig, Boolean isOdd, ColorEnum colorEnum) {
+    public String generate(LotteryEnum lotteryEnum, GameRuleEnum gameRuleEnum, Integer position, Boolean isBig, Boolean isOdd, ColorEnum colorEnum) {
         return getLotteryCode(lotteryEnum) +
                 getRuleCode(gameRuleEnum) +
                 getPositionCode(position) +
