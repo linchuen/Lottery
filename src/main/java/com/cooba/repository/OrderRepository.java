@@ -11,7 +11,9 @@ public interface OrderRepository {
 
     List<OrderEntity> selectUnsettleOrder(int lotteryId, long round);
 
-    void updateSettleOrder(SettleResult settleResult);
+    void updateSettleOrder(long orderId, SettleResult settleResult);
+
+    void updateSettleFailOrder(long orderId);
 
     void updateAwardOrder(long orderId);
 }

@@ -11,12 +11,14 @@ public class OrderEntity {
     private long playerId;
     private int walletId;
     private int assetId;
+    private long round;
     private String gameCode;
     private List<Integer> guessNumbers;
 
     private BigDecimal betAmount;
     private BigDecimal odds;
     private BigDecimal betPrize;
+    private BigDecimal fee;
 
     private int status;
     private Integer gameStatus;

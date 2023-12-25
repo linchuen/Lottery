@@ -1,9 +1,9 @@
-package com.cooba.component.config;
+package com.cooba.config;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
 @TestConfiguration
-@ComponentScan("com.cooba.component.Lottery")
+@ComponentScan("com.cooba.component.lottery")
 public class LotteryScan {
 }

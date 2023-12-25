@@ -8,8 +8,9 @@ public enum OrderStatusEnum {
     pay(1),
     cancel(2),
     settle(3),
-    award(4),
-    error(5);
+    settleFailed(4),
+    award(5),
+    error(6);
 
     private final int code;
 

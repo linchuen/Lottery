@@ -1,10 +1,10 @@
 package com.cooba.util;
 
+import com.cooba.enums.ColorEnum;
 import com.cooba.enums.GameRuleEnum;
 import com.cooba.enums.LotteryEnum;
 import com.cooba.object.GameInfo;
 import com.cooba.object.PlayParameter;
-import com.cooba.enums.ColorEnum;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -40,8 +40,8 @@ public class GameCodeUtility {
         return String.format("%04d", gameRuleEnum.getId());
     }
 
-    public String getPositionCode(int position) {
-        return position == 0 ? null : String.format("%02d", position);
+    public String getPositionCode(Integer position) {
+        return position == null ? "00" : String.format("%02d", position);
     }
 
     public String getIsBigCode(Boolean isBig) {
@@ -50,5 +50,18 @@ public class GameCodeUtility {
 
     public String getIsOddCode(Boolean isOdd) {
         return isOdd == null ? "2" : isOdd ? "1" : "0";
+    }
+
+    public String getColorCode(ColorEnum colorEnum) {
+        return String.format("%02d", colorEnum.getId());
+    }
+
+    public String generate(LotteryEnum lotteryEnum, GameRuleEnum gameRuleEnum, int position, Boolean isBig, Boolean isOdd, ColorEnum colorEnum) {
+        return getLotteryCode(lotteryEnum) +
+                getRuleCode(gameRuleEnum) +
+                getPositionCode(position) +
+                getIsBigCode(isBig) +
+                getIsOddCode(isOdd) +
+                getColorCode(colorEnum);
     }
 }

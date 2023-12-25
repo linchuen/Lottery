@@ -17,11 +17,13 @@ import com.cooba.publisher.Publisher;
 import com.cooba.repository.OrderRepository;
 import com.cooba.util.GameCodeUtility;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.List;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class LotterySystem implements Admin {
@@ -85,9 +87,17 @@ public class LotterySystem implements Admin {
 
         List<OrderEntity> unsettledOrders = orderRepository.selectUnsettleOrder(lotteryId, round);
         for (OrderEntity unsettledOrder : unsettledOrders) {
-            SettleResult settleResult = calculateSettleResult(winningNumbers, unsettledOrder);
-            orderRepository.updateSettleOrder(settleResult);
-            settleCompletePublisher.publishEvent(unsettledOrder.getId());
+            long orderId = unsettledOrder.getId();
+            SettleResult settleResult;
+            try {
+                settleResult = calculateSettleResult(winningNumbers, unsettledOrder);
+            } catch (Exception e) {
+                log.error(e.getMessage());
+                orderRepository.updateSettleFailOrder(orderId);
+                continue;
+            }
+            orderRepository.updateSettleOrder(orderId, settleResult);
+            settleCompletePublisher.publishEvent(orderId);
         }
     }
 
@@ -104,7 +114,9 @@ public class LotterySystem implements Admin {
         BigDecimal betPrize = orderEntity.getBetPrize();
 
         Wallet wallet = walletFactory.getWallet(walletId).orElseThrow();
-        wallet.increaseAsset(playerId, assetId, betPrize);
+        if (betPrize.compareTo(BigDecimal.ZERO) > 0) {
+            wallet.increaseAsset(playerId, assetId, betPrize);
+        }
         orderRepository.updateAwardOrder(orderEntity.getId());
     }
 }
