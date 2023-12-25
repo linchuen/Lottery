@@ -1,15 +1,17 @@
 package com.cooba.component.admin;
 
 import com.cooba.component.wallet.Wallet;
+import com.cooba.component.wallet.WalletFactory;
+import com.cooba.component.wallet.WalletFactoryImpl;
 import com.cooba.config.LotteryScan;
 import com.cooba.config.PlayRuleScan;
-import com.cooba.config.WalletScan;
 import com.cooba.entity.OrderEntity;
 import com.cooba.enums.ColorEnum;
 import com.cooba.enums.GameRuleEnum;
 import com.cooba.enums.GameStatusEnum;
 import com.cooba.enums.LotteryEnum;
 import com.cooba.enums.OrderStatusEnum;
+import com.cooba.enums.WalletEnum;
 import com.cooba.object.SettleResult;
 import com.cooba.object.WinningNumberInfo;
 import com.cooba.publisher.Publisher;
@@ -29,10 +31,16 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.never;
 
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {LotterySystem.class, GameCodeUtility.class, FakeOrderRepository.class, PlayRuleScan.class, LotteryScan.class, WalletScan.class})
+@ContextConfiguration(classes = {LotterySystem.class, GameCodeUtility.class, FakeOrderRepository.class, PlayRuleScan.class, LotteryScan.class})
 class LotterySystemTest {
     @Autowired
     LotterySystem lotterySystem;
@@ -40,6 +48,8 @@ class LotterySystemTest {
     GameCodeUtility gameCodeUtility;
     @MockBean
     Publisher publisher;
+    @MockBean
+    WalletFactory walletFactory;
     @MockBean
     Wallet wallet;
     @Autowired
@@ -166,12 +176,57 @@ class LotterySystemTest {
 
         lotterySystem.settleOrders(winningNumberInfo);
 
-        Mockito.verify(publisher).publishEvent(Mockito.any());
+        Mockito.verify(publisher).publishEvent(any());
         OrderEntity result = fakeOrderRepository.selectOrderById(1).orElseThrow();
         Assertions.assertEquals(OrderStatusEnum.settle.getCode(), result.getStatus());
     }
 
     @Test
-    void sendLotteryPrize() {
+    void sendLotteryPrizeIgnoreWrongStatus() {
+        OrderEntity testOrder = new OrderEntity();
+        testOrder.setId(2);
+        testOrder.setStatus(OrderStatusEnum.award.getCode());
+        testOrder.setBetPrize(BigDecimal.TEN);
+        fakeOrderRepository.putTestOrder(List.of(testOrder));
+
+        lotterySystem.sendLotteryPrize(2);
+
+        Mockito.verify(wallet,never()).increaseAsset(anyLong(),anyInt(),any(BigDecimal.class));
+    }
+
+    @Test
+    void sendLotteryPrizeSuccess() {
+        Mockito.when(walletFactory.getWallet(anyInt())).thenReturn(Optional.of(wallet));
+
+        OrderEntity testOrder = new OrderEntity();
+        testOrder.setId(2);
+        testOrder.setWalletId(WalletEnum.SIMPLE.getId());
+        testOrder.setStatus(OrderStatusEnum.settle.getCode());
+        testOrder.setBetPrize(BigDecimal.TEN);
+        fakeOrderRepository.putTestOrder(List.of(testOrder));
+
+        lotterySystem.sendLotteryPrize(2);
+
+        Mockito.verify(wallet).increaseAsset(anyLong(),anyInt(),any(BigDecimal.class));
+        OrderEntity result = fakeOrderRepository.selectOrderById(2).orElseThrow();
+        Assertions.assertEquals(OrderStatusEnum.award.getCode(), result.getStatus());
+    }
+
+    @Test
+    void sendZeroAmountLotteryPrizeSuccess() {
+        Mockito.when(walletFactory.getWallet(anyInt())).thenReturn(Optional.of(wallet));
+
+        OrderEntity testOrder = new OrderEntity();
+        testOrder.setId(2);
+        testOrder.setWalletId(WalletEnum.SIMPLE.getId());
+        testOrder.setStatus(OrderStatusEnum.settle.getCode());
+        testOrder.setBetPrize(BigDecimal.ZERO);
+        fakeOrderRepository.putTestOrder(List.of(testOrder));
+
+        lotterySystem.sendLotteryPrize(2);
+
+        Mockito.verify(wallet,never()).increaseAsset(anyLong(),anyInt(),any(BigDecimal.class));
+        OrderEntity result = fakeOrderRepository.selectOrderById(2).orElseThrow();
+        Assertions.assertEquals(OrderStatusEnum.award.getCode(), result.getStatus());
     }
 }
