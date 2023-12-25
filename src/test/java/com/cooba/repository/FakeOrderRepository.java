@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Repository
@@ -17,12 +18,12 @@ public class FakeOrderRepository implements OrderRepository {
     private final Map<Long, OrderEntity> orderEntityMap = new HashMap<>();
     private final GameCodeUtility gameCodeUtility = new GameCodeUtility();
 
-    public void clear(){
+    public void clear() {
         orderEntityMap.clear();
     }
 
     public void putTestOrder(List<OrderEntity> testOrders) {
-        testOrders.forEach(orderEntity -> orderEntityMap.put(orderEntity.getId(),orderEntity));
+        testOrders.forEach(orderEntity -> orderEntityMap.put(orderEntity.getId(), orderEntity));
     }
 
     @Override
@@ -46,35 +47,42 @@ public class FakeOrderRepository implements OrderRepository {
         orderEntity.setBetPrize(settleResult.getBetPrize());
         orderEntity.setGameStatus(settleResult.getGameStatus());
         orderEntity.setStatus(settleResult.getStatus());
-        orderEntityMap.put(orderId,orderEntity);
+        orderEntityMap.put(orderId, orderEntity);
     }
 
     @Override
     public void updateSettleFailOrder(long orderId) {
         OrderEntity orderEntity = selectOrderById(orderId).orElseThrow();
         orderEntity.setStatus(OrderStatusEnum.settleFailed.getCode());
-        orderEntityMap.put(orderId,orderEntity);
+        orderEntityMap.put(orderId, orderEntity);
     }
 
     @Override
     public void updateAwardOrder(long orderId) {
         OrderEntity orderEntity = selectOrderById(orderId).orElseThrow();
         orderEntity.setStatus(OrderStatusEnum.award.getCode());
-        orderEntityMap.put(orderId,orderEntity);
+        orderEntityMap.put(orderId, orderEntity);
     }
 
     @Override
     public long insertNewOrder(OrderEntity orderEntity) {
-        return 0;
+        long id = new Random().nextLong();
+        orderEntity.setId(id);
+        orderEntityMap.put(id, orderEntity);
+        return id;
     }
 
     @Override
     public void updatePayOrder(long orderId) {
-
+        OrderEntity orderEntity = selectOrderById(orderId).orElseThrow();
+        orderEntity.setStatus(OrderStatusEnum.pay.getCode());
+        orderEntityMap.put(orderId, orderEntity);
     }
 
     @Override
     public void updateCancelOrder(long orderId) {
-
+        OrderEntity orderEntity = selectOrderById(orderId).orElseThrow();
+        orderEntity.setStatus(OrderStatusEnum.cancel.getCode());
+        orderEntityMap.put(orderId, orderEntity);
     }
 }
