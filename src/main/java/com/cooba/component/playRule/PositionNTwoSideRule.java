@@ -1,28 +1,32 @@
-package com.cooba.component.PlayRule;
+package com.cooba.component.playRule;
 
+import com.cooba.component.playRule.common.TwoSideCommonMethod;
 import com.cooba.enums.GameRuleEnum;
-import com.cooba.object.LoseResult;
 import com.cooba.object.PlayParameter;
 import com.cooba.object.PlayResult;
-import com.cooba.object.WinResult;
+import com.cooba.object.TieResult;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 @Component
-public class GuessPositionNRule implements PlayRule {
+public class PositionNTwoSideRule implements PlayRule {
     @Override
     public PlayResult decideResult(List<Integer> winningNumbers, List<Integer> guessNumbers, PlayParameter playParameter) {
-        assert guessNumbers.size() == 1;
+        assert guessNumbers.isEmpty();
         assert playParameter.getPosition() != null;
 
         int position = playParameter.getPosition();
+        Boolean isBig = playParameter.getIsBig();
+        Boolean isOdd = playParameter.getIsOdd();
+
         int number = winningNumbers.get(position - 1);
-        int guessNumber = guessNumbers.get(0);
-        return number == guessNumber ? new WinResult() : LoseResult.getInstance();
+        if (number == 49) return new TieResult();
+
+        return TwoSideCommonMethod.decideTwoSideResult(isBig, isOdd, number, 25);
     }
 
     @Override
     public GameRuleEnum getGameRuleEnum() {
-        return GameRuleEnum.GuessPositionN;
+        return GameRuleEnum.PositionNTwoSide;
     }
 }

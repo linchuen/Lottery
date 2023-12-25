@@ -1,4 +1,4 @@
-package com.cooba.component.PlayRule;
+package com.cooba.component.playRule;
 
 import com.cooba.object.PlayParameter;
 import com.cooba.object.PlayResult;

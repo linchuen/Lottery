@@ -1,4 +1,4 @@
-package com.cooba.component.system;
+package com.cooba.component.admin;
 
 import com.cooba.component.config.LotteryScan;
 import com.cooba.component.config.PlayRuleScan;

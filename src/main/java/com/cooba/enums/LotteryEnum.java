@@ -4,6 +4,7 @@ import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.Map;
+
 @Getter
 public enum LotteryEnum {
     MarkSix(1);
@@ -19,7 +20,6 @@ public enum LotteryEnum {
         for (LotteryEnum value : LotteryEnum.values()) {
             lotteryEnumMap.put(value.id, value);
         }
-
     }
 
     public static LotteryEnum getLotteryById(int id) {

@@ -1,11 +1,11 @@
-package com.cooba.component.Lottery;
+package com.cooba.component.lottery;
 
-import com.cooba.component.PlayRule.ColorRule;
-import com.cooba.component.PlayRule.GuessPositionNRule;
-import com.cooba.component.PlayRule.PositionNTwoSideRule;
-import com.cooba.component.PlayRule.SelectNNotMatchRule;
-import com.cooba.component.PlayRule.SelectNRule;
-import com.cooba.component.PlayRule.SumRule;
+import com.cooba.component.playRule.ColorRule;
+import com.cooba.component.playRule.GuessPositionNRule;
+import com.cooba.component.playRule.PositionNTwoSideRule;
+import com.cooba.component.playRule.SelectNNotMatchRule;
+import com.cooba.component.playRule.SelectNRule;
+import com.cooba.component.playRule.SumRule;
 import com.cooba.enums.GameRuleEnum;
 import com.cooba.object.PlayParameter;
 import com.cooba.object.PlayResult;

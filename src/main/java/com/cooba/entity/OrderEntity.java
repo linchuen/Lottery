@@ -9,6 +9,8 @@ import java.util.List;
 public class OrderEntity {
     private long id;
     private long playerId;
+    private int walletId;
+    private int assetId;
     private String gameCode;
     private List<Integer> guessNumbers;
 

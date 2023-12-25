@@ -1,9 +1,9 @@
-package com.cooba.component.PlayRule;
+package com.cooba.component.playRule;
 
 import com.cooba.enums.GameRuleEnum;
 import com.cooba.object.PlayParameter;
 import com.cooba.object.PlayResult;
-import com.cooba.component.PlayRule.common.TwoSideCommonMethod;
+import com.cooba.component.playRule.common.TwoSideCommonMethod;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

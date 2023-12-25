@@ -1,4 +1,4 @@
-package com.cooba.component.Lottery;
+package com.cooba.component.lottery;
 
 import com.cooba.enums.LotteryEnum;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.cooba.component.system;
+package com.cooba.component.admin;
 
 import com.cooba.entity.OrderEntity;
 import com.cooba.object.SettleResult;
@@ -11,5 +11,5 @@ public interface Admin {
 
     void settleOrders(WinningNumberInfo winningNumberInfo);
 
-    void sendLotteryPrize(int playerId, SettleResult settleResult);
+    void sendLotteryPrize(long orderId);
 }

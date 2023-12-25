@@ -1,6 +1,6 @@
-package com.cooba.component.Lottery;
+package com.cooba.component.lottery;
 
-import com.cooba.component.PlayRule.PlayRule;
+import com.cooba.component.playRule.PlayRule;
 import com.cooba.enums.GameRuleEnum;
 import com.cooba.enums.LotteryEnum;
 import com.cooba.object.PlayParameter;

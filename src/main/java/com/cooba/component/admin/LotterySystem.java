@@ -1,13 +1,19 @@
-package com.cooba.component.system;
+package com.cooba.component.admin;
 
-import com.cooba.component.Lottery.Lottery;
-import com.cooba.component.Lottery.LotteryFactory;
-import com.cooba.component.Wallet.Wallet;
+import com.cooba.component.lottery.Lottery;
+import com.cooba.component.lottery.LotteryFactory;
+import com.cooba.component.wallet.Wallet;
+import com.cooba.component.wallet.WalletFactory;
 import com.cooba.entity.OrderEntity;
 import com.cooba.enums.GameRuleEnum;
 import com.cooba.enums.GameStatusEnum;
 import com.cooba.enums.OrderStatusEnum;
-import com.cooba.object.*;
+import com.cooba.object.GameInfo;
+import com.cooba.object.PlayParameter;
+import com.cooba.object.PlayResult;
+import com.cooba.object.SettleResult;
+import com.cooba.object.WinningNumberInfo;
+import com.cooba.publisher.Publisher;
 import com.cooba.repository.OrderRepository;
 import com.cooba.util.GameCodeUtility;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +27,9 @@ import java.util.List;
 public class LotterySystem implements Admin {
     private final LotteryFactory lotteryFactory;
     private final GameCodeUtility gameCodeUtility;
+    private final WalletFactory walletFactory;
     private final OrderRepository orderRepository;
-    private final Wallet wallet;
+    private final Publisher settleCompletePublisher;
     private static final BigDecimal feeRate = new BigDecimal("0.02");
 
     @Override
@@ -80,11 +87,24 @@ public class LotterySystem implements Admin {
         for (OrderEntity unsettledOrder : unsettledOrders) {
             SettleResult settleResult = calculateSettleResult(winningNumbers, unsettledOrder);
             orderRepository.updateSettleOrder(settleResult);
+            settleCompletePublisher.publishEvent(unsettledOrder.getId());
         }
     }
 
     @Override
-    public void sendLotteryPrize(int playerId, SettleResult settleResult) {
-        wallet.increaseAsset();
+    public void sendLotteryPrize(long orderId) {
+        OrderEntity orderEntity = orderRepository.selectOrderById(orderId).orElseThrow();
+        if (orderEntity.getStatus() != OrderStatusEnum.settle.getCode()) {
+            return;
+        }
+
+        int walletId = orderEntity.getWalletId();
+        long playerId = orderEntity.getPlayerId();
+        int assetId = orderEntity.getAssetId();
+        BigDecimal betPrize = orderEntity.getBetPrize();
+
+        Wallet wallet = walletFactory.getWallet(walletId).orElseThrow();
+        wallet.increaseAsset(playerId, assetId, betPrize);
+        orderRepository.updateAwardOrder(orderEntity.getId());
     }
 }

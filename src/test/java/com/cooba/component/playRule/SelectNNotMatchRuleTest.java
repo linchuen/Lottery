@@ -1,4 +1,4 @@
-package com.cooba.component.PlayRule;
+package com.cooba.component.playRule;
 
 import com.cooba.object.PlayResult;
 import org.junit.jupiter.api.Assertions;
