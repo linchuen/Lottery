@@ -4,6 +4,7 @@ import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Getter
 public enum WalletEnum {
@@ -22,7 +23,7 @@ public enum WalletEnum {
         }
     }
 
-    public static WalletEnum getWalletById(int id) {
-        return WalletEnumMap.get(id);
+    public static Optional<WalletEnum> getWalletById(int id) {
+        return Optional.ofNullable(WalletEnumMap.get(id));
     }
 }

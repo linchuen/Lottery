@@ -13,6 +13,11 @@ public class SimpleWallet implements Wallet{
     }
 
     @Override
+    public void decreaseAsset(long playerId, int assetId, BigDecimal amount) {
+
+    }
+
+    @Override
     public WalletEnum getWalletEnum() {
         return WalletEnum.SIMPLE;
     }

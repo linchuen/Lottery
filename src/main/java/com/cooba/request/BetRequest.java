@@ -1,4 +1,4 @@
-package com.cooba.entity;
+package com.cooba.request;
 
 import lombok.Data;
 
@@ -6,8 +6,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Data
-public class OrderEntity {
-    private long id;
+public class BetRequest {
     private long playerId;
     private int walletId;
     private int assetId;
@@ -15,10 +14,4 @@ public class OrderEntity {
     private String gameCode;
     private List<Integer> guessNumbers;
     private BigDecimal betAmount;
-
-    private BigDecimal odds;
-    private BigDecimal betPrize;
-    private BigDecimal fee;
-    private int status;
-    private Integer gameStatus;
 }

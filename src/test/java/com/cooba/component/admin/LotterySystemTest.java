@@ -2,7 +2,6 @@ package com.cooba.component.admin;
 
 import com.cooba.component.wallet.Wallet;
 import com.cooba.component.wallet.WalletFactory;
-import com.cooba.component.wallet.WalletFactoryImpl;
 import com.cooba.config.LotteryScan;
 import com.cooba.config.PlayRuleScan;
 import com.cooba.entity.OrderEntity;
@@ -196,7 +195,7 @@ class LotterySystemTest {
 
         lotterySystem.sendLotteryPrize(2);
 
-        Mockito.verify(wallet,never()).increaseAsset(anyLong(),anyInt(),any(BigDecimal.class));
+        Mockito.verify(wallet, never()).increaseAsset(anyLong(), anyInt(), any(BigDecimal.class));
     }
 
     @Test
@@ -212,7 +211,7 @@ class LotterySystemTest {
 
         lotterySystem.sendLotteryPrize(2);
 
-        Mockito.verify(wallet).increaseAsset(anyLong(),anyInt(),any(BigDecimal.class));
+        Mockito.verify(wallet).increaseAsset(anyLong(), anyInt(), any(BigDecimal.class));
         OrderEntity result = fakeOrderRepository.selectOrderById(2).orElseThrow();
         Assertions.assertEquals(OrderStatusEnum.award.getCode(), result.getStatus());
     }
@@ -230,7 +229,7 @@ class LotterySystemTest {
 
         lotterySystem.sendLotteryPrize(2);
 
-        Mockito.verify(wallet,never()).increaseAsset(anyLong(),anyInt(),any(BigDecimal.class));
+        Mockito.verify(wallet, never()).increaseAsset(anyLong(), anyInt(), any(BigDecimal.class));
         OrderEntity result = fakeOrderRepository.selectOrderById(2).orElseThrow();
         Assertions.assertEquals(OrderStatusEnum.award.getCode(), result.getStatus());
     }

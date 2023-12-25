@@ -1,10 +1,8 @@
 package com.cooba.component.player;
 
-import java.util.List;
+import com.cooba.object.BetResult;
+import com.cooba.request.BetRequest;
 
-public class Player {
-
-    public void bet(String gameCode, List<Integer> guessNumber) {
-
-    }
+public interface Player {
+    BetResult bet(long playerId, BetRequest betRequest);
 }

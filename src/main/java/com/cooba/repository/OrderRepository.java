@@ -16,4 +16,8 @@ public interface OrderRepository {
     void updateSettleFailOrder(long orderId);
 
     void updateAwardOrder(long orderId);
+
+    long insertNewOrder(OrderEntity orderEntity);
+
+    void updatePayOrder(long orderId);
 }

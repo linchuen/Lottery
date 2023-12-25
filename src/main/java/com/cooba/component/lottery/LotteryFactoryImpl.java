@@ -1,7 +1,6 @@
 package com.cooba.component.lottery;
 
 import com.cooba.enums.LotteryEnum;
-import lombok.Getter;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -30,5 +29,5 @@ public class LotteryFactoryImpl implements LotteryFactory{
     @Override
     public Optional<Lottery> getLottery(int id){
         return Optional.ofNullable(lotteryIdMap.get(id));
-    };
+    }
 }

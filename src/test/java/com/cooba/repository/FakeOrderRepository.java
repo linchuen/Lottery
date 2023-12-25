@@ -62,4 +62,14 @@ public class FakeOrderRepository implements OrderRepository {
         orderEntity.setStatus(OrderStatusEnum.award.getCode());
         orderEntityMap.put(orderId,orderEntity);
     }
+
+    @Override
+    public long insertNewOrder(OrderEntity orderEntity) {
+        return 0;
+    }
+
+    @Override
+    public void updatePayOrder(long orderId) {
+
+    }
 }

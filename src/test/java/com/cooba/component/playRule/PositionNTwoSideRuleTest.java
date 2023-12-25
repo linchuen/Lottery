@@ -2,7 +2,6 @@ package com.cooba.component.playRule;
 
 import com.cooba.object.PlayParameter;
 import com.cooba.object.PlayResult;
-import com.cooba.object.TieResult;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -59,6 +58,6 @@ class PositionNTwoSideRuleTest {
         PlayParameter playParameter = PlayParameter.builder().position(7).isBig(false).build();
 
         PlayResult result = positionNTwoSideRule.decideResult(winningNumbers, Collections.emptyList(), playParameter);
-        Assertions.assertTrue(((TieResult)result).isTie());
+        Assertions.assertTrue(result.isTie());
     }
 }

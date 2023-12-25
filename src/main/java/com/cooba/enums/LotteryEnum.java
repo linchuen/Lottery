@@ -4,6 +4,7 @@ import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Getter
 public enum LotteryEnum {
@@ -22,7 +23,7 @@ public enum LotteryEnum {
         }
     }
 
-    public static LotteryEnum getLotteryById(int id) {
-        return lotteryEnumMap.get(id);
+    public static Optional<LotteryEnum> getLotteryById(int id) {
+        return Optional.ofNullable(lotteryEnumMap.get(id));
     }
 }
