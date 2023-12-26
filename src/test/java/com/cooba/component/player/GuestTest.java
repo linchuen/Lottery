@@ -7,6 +7,7 @@ import com.cooba.entity.OrderEntity;
 import com.cooba.object.BetResult;
 import com.cooba.repository.FakeOrderRepository;
 import com.cooba.request.BetRequest;
+import com.cooba.util.MapLockUntil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,7 +25,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {Guest.class, FakeOrderRepository.class})
+@ContextConfiguration(classes = {Guest.class, FakeOrderRepository.class, MapLockUntil.class})
 class GuestTest {
     @Autowired
     Guest guest;
