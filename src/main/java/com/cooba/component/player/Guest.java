@@ -29,11 +29,7 @@ public class Guest implements Player {
         Supplier<BetResult> betProcess = () -> {
             OrderEntity newOrder = order.generate(betRequest);
             if (!order.valid(newOrder)) {
-                BetResult betResult = new BetResult();
-                betResult.setSuccess(false);
-                betResult.setErrorMessage("驗證失敗");
-                betResult.addBetRequestAttribute(betRequest);
-                return betResult;
+                return getErrorBetResult("驗證失敗", betRequest);
             }
 
             long orderId = orderRepository.insertNewOrder(newOrder);
@@ -55,21 +51,21 @@ public class Guest implements Player {
             } catch (Exception e) {
                 orderRepository.updateCancelOrder(orderId);
 
-                BetResult betResult = new BetResult();
+                BetResult betResult = getErrorBetResult(e.getMessage(), betRequest);
                 betResult.setOrderId(orderId);
-                betResult.setSuccess(false);
-                betResult.setErrorMessage(e.getMessage());
-                betResult.addBetRequestAttribute(betRequest);
                 return betResult;
             }
         };
         return lockUtil.tryLock(key, 1, TimeUnit.SECONDS, 3, betProcess)
-                .orElseGet(() -> {
-                    BetResult betResult = new BetResult();
-                    betResult.setSuccess(false);
-                    betResult.setErrorMessage("無法取得鎖");
-                    return betResult;
-                });
+                .orElseGet(() -> getErrorBetResult("無法取得鎖", betRequest));
+    }
+
+    private static BetResult getErrorBetResult(String msg, BetRequest betRequest) {
+        BetResult betResult = new BetResult();
+        betResult.setSuccess(false);
+        betResult.setErrorMessage(msg);
+        betResult.addBetRequestAttribute(betRequest);
+        return betResult;
     }
 
 }
