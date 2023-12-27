@@ -115,7 +115,7 @@ public class LotterySystem implements Admin {
 
         Wallet wallet = walletFactory.getWallet(walletId).orElseThrow();
         if (betPrize.compareTo(BigDecimal.ZERO) > 0) {
-            wallet.depositAsset(playerId, assetId, betPrize);
+            wallet.increaseAsset(playerId, assetId, betPrize);
         }
         orderRepository.updateAwardOrder(orderEntity.getId());
     }

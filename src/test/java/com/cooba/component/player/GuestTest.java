@@ -4,6 +4,7 @@ import com.cooba.component.order.Order;
 import com.cooba.component.wallet.Wallet;
 import com.cooba.component.wallet.WalletFactory;
 import com.cooba.entity.OrderEntity;
+import com.cooba.exception.InsufficientBalanceException;
 import com.cooba.object.BetResult;
 import com.cooba.repository.FakeOrderRepository;
 import com.cooba.request.BetRequest;
@@ -48,7 +49,7 @@ class GuestTest {
     }
 
     @Test
-    public void betWithDecreaseMoneyError() {
+    public void betWithDecreaseMoneyError() throws Exception {
         BetRequest testBetRequest = new BetRequest();
         testBetRequest.setWalletId(1);
         testBetRequest.setAssetId(1);
@@ -58,8 +59,8 @@ class GuestTest {
         Mockito.when(order.generate(testBetRequest)).thenReturn(testOrder);
         Mockito.when(order.valid(any(OrderEntity.class))).thenReturn(true);
         Mockito.when(walletFactory.getWallet(anyInt())).thenReturn(Optional.of(wallet));
-        Mockito.doThrow(new RuntimeException())
-                .when(wallet).withdrawAsset(anyLong(), anyInt(), any(BigDecimal.class));
+        Mockito.doThrow(new InsufficientBalanceException())
+                .when(wallet).decreaseAsset(anyLong(), anyInt(), any(BigDecimal.class));
 
         BetResult betResult = guest.bet(1, testBetRequest);
 

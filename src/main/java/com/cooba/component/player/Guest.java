@@ -40,7 +40,7 @@ public class Guest implements Player {
 
             Wallet wallet = walletFactory.getWallet(walletId).orElseThrow();
             try {
-                wallet.withdrawAsset(playerId, assetId, betAmount);
+                wallet.decreaseAsset(playerId, assetId, betAmount);
                 orderRepository.updatePayOrder(orderId);
 
                 BetResult betResult = new BetResult();

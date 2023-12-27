@@ -17,7 +17,7 @@ public class SimpleWallet implements Wallet {
     private final PlayerWalletRepository playerWalletRepository;
 
     @Override
-    public void depositAsset(long playerId, int assetId, BigDecimal amount) {
+    public void increaseAsset(long playerId, int assetId, BigDecimal amount) {
         Optional<BigDecimal> balance = playerWalletRepository.selectAssetAmount(playerId, assetId);
 
         if (balance.isEmpty()) {
@@ -29,7 +29,7 @@ public class SimpleWallet implements Wallet {
     }
 
     @Override
-    public void withdrawAsset(long playerId, int assetId, BigDecimal amount) throws InsufficientBalanceException {
+    public void decreaseAsset(long playerId, int assetId, BigDecimal amount) throws InsufficientBalanceException {
         Optional<BigDecimal> balance = playerWalletRepository.selectAssetAmount(playerId, assetId);
 
         if (balance.isEmpty()) {
