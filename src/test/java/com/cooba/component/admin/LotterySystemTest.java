@@ -195,7 +195,7 @@ class LotterySystemTest {
 
         lotterySystem.sendLotteryPrize(2);
 
-        Mockito.verify(wallet, never()).increaseAsset(anyLong(), anyInt(), any(BigDecimal.class));
+        Mockito.verify(wallet, never()).depositAsset(anyLong(), anyInt(), any(BigDecimal.class));
     }
 
     @Test
@@ -211,7 +211,7 @@ class LotterySystemTest {
 
         lotterySystem.sendLotteryPrize(2);
 
-        Mockito.verify(wallet).increaseAsset(anyLong(), anyInt(), any(BigDecimal.class));
+        Mockito.verify(wallet).depositAsset(anyLong(), anyInt(), any(BigDecimal.class));
         OrderEntity result = fakeOrderRepository.selectOrderById(2).orElseThrow();
         Assertions.assertEquals(OrderStatusEnum.award.getCode(), result.getStatus());
     }
@@ -229,7 +229,7 @@ class LotterySystemTest {
 
         lotterySystem.sendLotteryPrize(2);
 
-        Mockito.verify(wallet, never()).increaseAsset(anyLong(), anyInt(), any(BigDecimal.class));
+        Mockito.verify(wallet, never()).depositAsset(anyLong(), anyInt(), any(BigDecimal.class));
         OrderEntity result = fakeOrderRepository.selectOrderById(2).orElseThrow();
         Assertions.assertEquals(OrderStatusEnum.award.getCode(), result.getStatus());
     }

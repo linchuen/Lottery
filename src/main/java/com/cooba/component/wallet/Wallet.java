@@ -5,9 +5,9 @@ import com.cooba.enums.WalletEnum;
 import java.math.BigDecimal;
 
 public interface Wallet {
-    void increaseAsset(long playerId, int assetId, BigDecimal amount);
+    void depositAsset(long playerId, int assetId, BigDecimal amount);
 
-    void decreaseAsset(long playerId, int assetId, BigDecimal amount);
+    void withdrawAsset(long playerId, int assetId, BigDecimal amount) throws Exception;
 
     WalletEnum getWalletEnum();
 }

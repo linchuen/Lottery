@@ -59,7 +59,7 @@ class GuestTest {
         Mockito.when(order.valid(any(OrderEntity.class))).thenReturn(true);
         Mockito.when(walletFactory.getWallet(anyInt())).thenReturn(Optional.of(wallet));
         Mockito.doThrow(new RuntimeException())
-                .when(wallet).decreaseAsset(anyLong(), anyInt(), any(BigDecimal.class));
+                .when(wallet).withdrawAsset(anyLong(), anyInt(), any(BigDecimal.class));
 
         BetResult betResult = guest.bet(1, testBetRequest);
 
