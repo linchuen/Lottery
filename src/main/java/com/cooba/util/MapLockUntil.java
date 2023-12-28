@@ -1,5 +1,6 @@
 package com.cooba.util;
 
+import com.cooba.others.ThrowableRunnable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -34,5 +35,10 @@ public class MapLockUntil implements LockUtil {
         if (releaseTime > System.currentTimeMillis()) return Optional.empty();
         lockMap.put(key, System.currentTimeMillis() + expireTime * 1000L);
         return Optional.of(supplier.get());
+    }
+
+    @Override
+    public void tryLock(String key, int timeout, TimeUnit timeUnit, ThrowableRunnable runnable) throws Exception {
+
     }
 }

@@ -8,6 +8,8 @@ import com.cooba.object.BetResult;
 import com.cooba.repository.OrderRepository;
 import com.cooba.request.BetRequest;
 import com.cooba.util.LockUtil;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -35,29 +37,35 @@ public class Guest implements Player {
             long orderId = orderRepository.insertNewOrder(newOrder);
 
             int walletId = betRequest.getWalletId();
-            int assetId = betRequest.getAssetId();
-            BigDecimal betAmount = betRequest.getBetAmount();
-
             Wallet wallet = walletFactory.getWallet(walletId).orElseThrow();
-            try {
-                wallet.decreaseAsset(playerId, assetId, betAmount);
-                orderRepository.updatePayOrder(orderId);
+            PayResult payResult = payOrder(betRequest, playerId, wallet, orderId);
 
-                BetResult betResult = new BetResult();
-                betResult.setOrderId(orderId);
-                betResult.setSuccess(true);
-                betResult.addBetRequestAttribute(betRequest);
-                return betResult;
-            } catch (Exception e) {
-                orderRepository.updateCancelOrder(orderId);
-
-                BetResult betResult = getErrorBetResult(e.getMessage(), betRequest);
-                betResult.setOrderId(orderId);
-                return betResult;
-            }
+            BetResult betResult = new BetResult();
+            betResult.setOrderId(orderId);
+            betResult.setSuccess(payResult.isSuccess);
+            betResult.setErrorMessage(payResult.errorMessage);
+            betResult.addBetRequestAttribute(betRequest);
+            return betResult;
         };
         return lockUtil.tryLock(key, 1, TimeUnit.SECONDS, 3, betProcess)
                 .orElseGet(() -> getErrorBetResult("無法取得鎖", betRequest));
+    }
+
+    private PayResult payOrder(BetRequest betRequest, long playerId, Wallet wallet, long orderId) {
+        int assetId = betRequest.getAssetId();
+        BigDecimal betAmount = betRequest.getBetAmount();
+
+        PayResult.PayResultBuilder payResultBuilder = PayResult.builder();
+        try {
+            wallet.decreaseAsset(playerId, assetId, betAmount);
+            orderRepository.updatePayOrder(orderId);
+            payResultBuilder.isSuccess(true);
+        } catch (Exception e) {
+            orderRepository.updateCancelOrder(orderId);
+            payResultBuilder.isSuccess(false);
+            payResultBuilder.errorMessage(e.getMessage());
+        }
+        return payResultBuilder.build();
     }
 
     private static BetResult getErrorBetResult(String msg, BetRequest betRequest) {
@@ -68,4 +76,10 @@ public class Guest implements Player {
         return betResult;
     }
 
+    @Builder
+    @Getter
+    private static class PayResult {
+        private boolean isSuccess;
+        private String errorMessage;
+    }
 }

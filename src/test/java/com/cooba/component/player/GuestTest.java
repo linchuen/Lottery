@@ -87,7 +87,7 @@ class GuestTest {
     }
 
     @Test
-    public void betTwiceAtSameTime() {
+    public void betTwiceContinuously() {
         BetRequest testBetRequest = new BetRequest();
         testBetRequest.setWalletId(1);
         testBetRequest.setAssetId(1);
