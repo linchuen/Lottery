@@ -71,11 +71,4 @@ public class Guest implements Player {
         betResult.addBetRequestAttribute(betRequest);
         return betResult;
     }
-
-    @Builder
-    @Getter
-    private static class PayResult {
-        private boolean isSuccess;
-        private String errorMessage;
-    }
 }

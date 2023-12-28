@@ -52,7 +52,6 @@ public class SimpleWallet implements Wallet {
                     BigDecimal newBalance = balance.get().subtract(amount);
 
                     if (newBalance.compareTo(BigDecimal.ZERO) < 0) {
-                        log.error("玩家: {} 餘額不足", playerId);
                         throw new InsufficientBalanceException();
                     }
                     playerWalletRepository.updateAssetAmount(playerId, assetId, newBalance);
