@@ -23,7 +23,7 @@ public class SimpleWallet implements Wallet {
     public void increaseAsset(long playerId, int assetId, BigDecimal amount) {
         String key = this.getWalletEnum().name() + playerId + assetId;
         try {
-            lockUtil.tryLock(key, 1, TimeUnit.SECONDS, () -> {
+            lockUtil.tryLock(key, 3, TimeUnit.SECONDS, () -> {
                 Optional<BigDecimal> balance = playerWalletRepository.selectAssetAmount(playerId, assetId);
 
                 if (balance.isEmpty()) {

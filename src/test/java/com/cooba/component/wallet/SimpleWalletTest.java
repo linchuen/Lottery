@@ -1,12 +1,15 @@
 package com.cooba.component.wallet;
 
+import com.cooba.config.RedissonConfig;
 import com.cooba.exception.InsufficientBalanceException;
 import com.cooba.repository.FakePlayerWalletRepository;
+import com.cooba.util.RedissonLockUtil;
 import com.cooba.util.ReentrantLockUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -19,6 +22,9 @@ import java.util.concurrent.Executors;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
+//@ExtendWith(SpringExtension.class)
+//@SpringBootTest
+//@ContextConfiguration(classes = {SimpleWallet.class, FakePlayerWalletRepository.class, RedissonLockUtil.class, RedissonConfig.class})
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {SimpleWallet.class, FakePlayerWalletRepository.class, ReentrantLockUtil.class})
 class SimpleWalletTest {
