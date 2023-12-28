@@ -30,7 +30,7 @@ class MarkSixLotteryTest {
                 new SelectNRule(),
                 new SelectNNotMatchRule(),
                 new SumRule()
-        ));
+        ), lotteryNumberRepository);
     }
 
     @Test

@@ -10,4 +10,9 @@ public class SqlLotteryNumberRepository implements LotteryNumberRepository {
     public Long getNextRound(int lotteryId) {
         return null;
     }
+
+    @Override
+    public Long getLastRound(int lotteryId) {
+        return null;
+    }
 }
