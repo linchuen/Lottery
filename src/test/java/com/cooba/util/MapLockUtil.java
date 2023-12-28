@@ -13,7 +13,7 @@ import java.util.function.Supplier;
 
 @Slf4j
 @Component
-public class MapLockUntil implements LockUtil {
+public class MapLockUtil implements LockUtil {
     private final Map<String, Long> lockMap = new ConcurrentHashMap<>();
 
     @Override

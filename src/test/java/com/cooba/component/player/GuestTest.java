@@ -3,26 +3,27 @@ package com.cooba.component.player;
 import com.cooba.component.order.Order;
 import com.cooba.component.wallet.Wallet;
 import com.cooba.component.wallet.WalletFactory;
-import com.cooba.config.RedissonConfig;
 import com.cooba.entity.OrderEntity;
 import com.cooba.exception.InsufficientBalanceException;
 import com.cooba.object.BetResult;
 import com.cooba.repository.FakeOrderRepository;
 import com.cooba.request.BetRequest;
-import com.cooba.util.MapLockUntil;
-import com.cooba.util.RedissonLockUtil;
+import com.cooba.util.MapLockUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -32,7 +33,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 //@SpringBootTest
 //@ContextConfiguration(classes = {Guest.class, FakeOrderRepository.class, RedissonLockUtil.class, RedissonConfig.class})
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {Guest.class, FakeOrderRepository.class, MapLockUntil.class})
+@ContextConfiguration(classes = {Guest.class, FakeOrderRepository.class, MapLockUtil.class})
 class GuestTest {
     @Autowired
     Guest guest;
@@ -93,7 +94,7 @@ class GuestTest {
     }
 
     @Test
-    public void betTwiceContinuously() {
+    public void betTwiceContinuously() throws ExecutionException, InterruptedException {
         BetRequest testBetRequest = new BetRequest();
         testBetRequest.setWalletId(1);
         testBetRequest.setAssetId(1);
@@ -104,9 +105,14 @@ class GuestTest {
         Mockito.when(order.valid(any(OrderEntity.class))).thenReturn(true);
         Mockito.when(walletFactory.getWallet(anyInt())).thenReturn(Optional.of(wallet));
 
-        BetResult betResult1 = guest.bet(4, testBetRequest);
-        BetResult betResult2 = guest.bet(4, testBetRequest);
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        BetResult betResult1 = CompletableFuture.supplyAsync(() -> guest.bet(4, testBetRequest), executorService).get();
+        BetResult betResult2 = CompletableFuture.supplyAsync(() -> guest.bet(4, testBetRequest), executorService).get();
+        Thread.sleep(3000);
+        BetResult betResult3 = CompletableFuture.supplyAsync(() -> guest.bet(4, testBetRequest), executorService).get();
 
-        Assertions.assertFalse(betResult1.isSuccess() && betResult2.isSuccess());
+        Assertions.assertTrue(betResult1.isSuccess());
+        Assertions.assertFalse(betResult2.isSuccess());
+        Assertions.assertTrue(betResult3.isSuccess());
     }
 }
