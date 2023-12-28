@@ -36,36 +36,32 @@ public class Guest implements Player {
 
             long orderId = orderRepository.insertNewOrder(newOrder);
 
+            int assetId = betRequest.getAssetId();
+            BigDecimal betAmount = betRequest.getBetAmount();
+
             int walletId = betRequest.getWalletId();
             Wallet wallet = walletFactory.getWallet(walletId).orElseThrow();
-            PayResult payResult = payOrder(betRequest, playerId, wallet, orderId);
 
             BetResult betResult = new BetResult();
             betResult.setOrderId(orderId);
-            betResult.setSuccess(payResult.isSuccess);
-            betResult.setErrorMessage(payResult.errorMessage);
             betResult.addBetRequestAttribute(betRequest);
-            return betResult;
+            try {
+                wallet.decreaseAsset(playerId, assetId, betAmount);
+
+                orderRepository.updatePayOrder(orderId);
+
+                betResult.setSuccess(true);
+                return betResult;
+            } catch (Exception e) {
+                orderRepository.updateCancelOrder(orderId);
+
+                betResult.setSuccess(false);
+                betResult.setErrorMessage(e.getMessage());
+                return betResult;
+            }
         };
         return lockUtil.tryLock(key, 1, TimeUnit.SECONDS, 3, betProcess)
                 .orElseGet(() -> getErrorBetResult("無法取得鎖", betRequest));
-    }
-
-    private PayResult payOrder(BetRequest betRequest, long playerId, Wallet wallet, long orderId) {
-        int assetId = betRequest.getAssetId();
-        BigDecimal betAmount = betRequest.getBetAmount();
-
-        PayResult.PayResultBuilder payResultBuilder = PayResult.builder();
-        try {
-            wallet.decreaseAsset(playerId, assetId, betAmount);
-            orderRepository.updatePayOrder(orderId);
-            payResultBuilder.isSuccess(true);
-        } catch (Exception e) {
-            orderRepository.updateCancelOrder(orderId);
-            payResultBuilder.isSuccess(false);
-            payResultBuilder.errorMessage(e.getMessage());
-        }
-        return payResultBuilder.build();
     }
 
     private static BetResult getErrorBetResult(String msg, BetRequest betRequest) {
