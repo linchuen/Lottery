@@ -1,5 +1,6 @@
 package com.cooba.util;
 
+import com.cooba.exception.NotImplementException;
 import com.cooba.others.ThrowableRunnable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -39,6 +40,6 @@ public class MapLockUtil implements LockUtil {
 
     @Override
     public void tryLock(String key, int timeout, TimeUnit timeUnit, ThrowableRunnable runnable) throws Exception {
-
+        throw new NotImplementException();
     }
 }
