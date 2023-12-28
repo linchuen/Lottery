@@ -3,17 +3,20 @@ package com.cooba.component.player;
 import com.cooba.component.order.Order;
 import com.cooba.component.wallet.Wallet;
 import com.cooba.component.wallet.WalletFactory;
+import com.cooba.config.RedissonConfig;
 import com.cooba.entity.OrderEntity;
 import com.cooba.exception.InsufficientBalanceException;
 import com.cooba.object.BetResult;
 import com.cooba.repository.FakeOrderRepository;
 import com.cooba.request.BetRequest;
 import com.cooba.util.MapLockUntil;
+import com.cooba.util.RedissonLockUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -25,6 +28,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 
+//@ExtendWith(SpringExtension.class)
+//@SpringBootTest
+//@ContextConfiguration(classes = {Guest.class, FakeOrderRepository.class, RedissonLockUtil.class, RedissonConfig.class})
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {Guest.class, FakeOrderRepository.class, MapLockUntil.class})
 class GuestTest {
@@ -62,7 +68,7 @@ class GuestTest {
         Mockito.doThrow(new InsufficientBalanceException())
                 .when(wallet).decreaseAsset(anyLong(), anyInt(), any(BigDecimal.class));
 
-        BetResult betResult = guest.bet(1, testBetRequest);
+        BetResult betResult = guest.bet(2, testBetRequest);
 
         Assertions.assertFalse(betResult.isSuccess());
         Assertions.assertNotEquals("驗證失敗", betResult.getErrorMessage());
@@ -80,7 +86,7 @@ class GuestTest {
         Mockito.when(order.valid(any(OrderEntity.class))).thenReturn(true);
         Mockito.when(walletFactory.getWallet(anyInt())).thenReturn(Optional.of(wallet));
 
-        BetResult betResult = guest.bet(1, testBetRequest);
+        BetResult betResult = guest.bet(3, testBetRequest);
 
         Assertions.assertTrue(betResult.isSuccess());
         Assertions.assertNull(betResult.getErrorMessage());
@@ -98,8 +104,8 @@ class GuestTest {
         Mockito.when(order.valid(any(OrderEntity.class))).thenReturn(true);
         Mockito.when(walletFactory.getWallet(anyInt())).thenReturn(Optional.of(wallet));
 
-        BetResult betResult1 = guest.bet(1, testBetRequest);
-        BetResult betResult2 = guest.bet(1, testBetRequest);
+        BetResult betResult1 = guest.bet(4, testBetRequest);
+        BetResult betResult2 = guest.bet(4, testBetRequest);
 
         Assertions.assertFalse(betResult1.isSuccess() && betResult2.isSuccess());
     }
