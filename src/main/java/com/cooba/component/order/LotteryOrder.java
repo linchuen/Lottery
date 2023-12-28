@@ -6,7 +6,7 @@ import com.cooba.enums.LotteryEnum;
 import com.cooba.enums.OrderStatusEnum;
 import com.cooba.enums.WalletEnum;
 import com.cooba.object.GameInfo;
-import com.cooba.repository.LotteryNumberRepository;
+import com.cooba.repository.LotteryNumber.LotteryNumberRepository;
 import com.cooba.request.BetRequest;
 import com.cooba.util.GameCodeUtility;
 import lombok.RequiredArgsConstructor;

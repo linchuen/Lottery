@@ -4,7 +4,7 @@ import com.cooba.entity.OrderEntity;
 import com.cooba.enums.GameRuleEnum;
 import com.cooba.enums.LotteryEnum;
 import com.cooba.enums.WalletEnum;
-import com.cooba.repository.LotteryNumberRepository;
+import com.cooba.repository.LotteryNumber.LotteryNumberRepository;
 import com.cooba.request.BetRequest;
 import com.cooba.util.GameCodeUtility;
 import org.junit.jupiter.api.Assertions;

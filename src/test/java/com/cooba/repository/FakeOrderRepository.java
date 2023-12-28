@@ -3,6 +3,7 @@ package com.cooba.repository;
 import com.cooba.entity.OrderEntity;
 import com.cooba.enums.OrderStatusEnum;
 import com.cooba.object.SettleResult;
+import com.cooba.repository.Order.OrderRepository;
 import com.cooba.util.GameCodeUtility;
 import org.springframework.stereotype.Repository;
 

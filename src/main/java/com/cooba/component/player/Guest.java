@@ -5,11 +5,9 @@ import com.cooba.component.wallet.Wallet;
 import com.cooba.component.wallet.WalletFactory;
 import com.cooba.entity.OrderEntity;
 import com.cooba.object.BetResult;
-import com.cooba.repository.OrderRepository;
+import com.cooba.repository.Order.OrderRepository;
 import com.cooba.request.BetRequest;
 import com.cooba.util.LockUtil;
-import lombok.Builder;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

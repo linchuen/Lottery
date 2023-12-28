@@ -14,7 +14,7 @@ import com.cooba.object.PlayResult;
 import com.cooba.object.SettleResult;
 import com.cooba.object.WinningNumberInfo;
 import com.cooba.publisher.Publisher;
-import com.cooba.repository.OrderRepository;
+import com.cooba.repository.Order.OrderRepository;
 import com.cooba.util.GameCodeUtility;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

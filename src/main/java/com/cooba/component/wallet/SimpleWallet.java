@@ -2,7 +2,7 @@ package com.cooba.component.wallet;
 
 import com.cooba.enums.WalletEnum;
 import com.cooba.exception.InsufficientBalanceException;
-import com.cooba.repository.PlayerWalletRepository;
+import com.cooba.repository.PlayerWallet.PlayerWalletRepository;
 import com.cooba.util.LockUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

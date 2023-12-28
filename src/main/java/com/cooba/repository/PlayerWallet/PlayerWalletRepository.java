@@ -1,4 +1,4 @@
-package com.cooba.repository;
+package com.cooba.repository.PlayerWallet;
 
 import java.math.BigDecimal;
 import java.util.Optional;
