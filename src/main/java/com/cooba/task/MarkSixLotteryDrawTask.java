@@ -1,10 +1,10 @@
 package com.cooba.task;
 
 import com.cooba.component.admin.Admin;
-import com.cooba.component.lottery.MarkSixLottery;
+import com.cooba.component.lottery.Lottery;
 import com.cooba.object.WinningNumberInfo;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -12,10 +12,14 @@ import java.time.ZoneOffset;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class MarkSixLotteryDrawTask implements Task {
-    private final MarkSixLottery lottery;
+    private final Lottery lottery;
     private final Admin lotterySystem;
+
+    public MarkSixLotteryDrawTask(@Qualifier("MarkSixLottery") Lottery lottery, Admin lotterySystem) {
+        this.lottery = lottery;
+        this.lotterySystem = lotterySystem;
+    }
 
     @Override
     public void execute() {
@@ -36,7 +40,7 @@ public class MarkSixLotteryDrawTask implements Task {
         int timeDiff = (int) (nextRoundTime.toEpochSecond(zoneOffset) - now.toEpochSecond(zoneOffset));
         if (timeDiff > 0) {
             try {
-                Thread.sleep(timeDiff);
+                Thread.sleep(timeDiff * 1000L);
             } catch (InterruptedException e) {
                 log.error("沉睡遇到錯誤 {}", e.getMessage());
                 throw new RuntimeException(e);
