@@ -84,9 +84,10 @@ public class MarkSixLottery implements Lottery {
     @Override
     public long calculateNextRound(LocalDateTime now) {
         LorreryRoundEnum roundEnum = this.getLorreryRoundEnum();
-        int startNum = roundEnum.getNum();
-        int startTimeSecond = roundEnum.getStart().toSecondOfDay();
+        int startNum = roundEnum.getStartRound();
         int intervalSecond = (int) roundEnum.getTimeUnit().toSeconds(roundEnum.getIntervalTime());
+        //開始時間已是第2期
+        int startTimeSecond = roundEnum.getStart().toSecondOfDay() - intervalSecond;
 
         int nowSecond = now.toLocalTime().toSecondOfDay();
         int timeDiff = nowSecond - startTimeSecond;
