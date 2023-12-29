@@ -19,7 +19,7 @@ spring:
   quartz:
     job-store-type: jdbc
     jdbc:
-      initialize-schema: always
+      initialize-schema: never
     overwrite-existing-jobs: false
 
 mybatis:
