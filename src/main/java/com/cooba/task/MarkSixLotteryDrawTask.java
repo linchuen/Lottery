@@ -18,7 +18,7 @@ public class MarkSixLotteryDrawTask extends QuartzJobBean implements Task {
     private final Lottery lottery;
     private final Admin lotterySystem;
 
-    public MarkSixLotteryDrawTask(@Qualifier("MarkSixLottery") Lottery lottery, Admin lotterySystem) {
+    public MarkSixLotteryDrawTask(@Qualifier("markSixLottery")Lottery lottery, Admin lotterySystem) {
         this.lottery = lottery;
         this.lotterySystem = lotterySystem;
     }
@@ -52,7 +52,7 @@ public class MarkSixLotteryDrawTask extends QuartzJobBean implements Task {
 
     @Override
     protected void executeInternal(JobExecutionContext context) {
-        log.info("開始執行 {}", context.getJobDetail().getDescription());
+        log.info("開始執行 {}", context.getJobDetail().getKey().getName());
         execute();
     }
 }
