@@ -9,3 +9,13 @@ spring:
       max-idle: 8
       min-idle: 0
       timeout: 600
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/main
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: always
+    overwrite-existing-jobs: false

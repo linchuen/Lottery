@@ -11,6 +11,6 @@ public class SqlLotteryNumberRepository implements LotteryNumberRepository {
 
     @Override
     public boolean insertNumber(int lotteryId, long round, List<Integer> winningNumbers) {
-        return false;
+        return true;
     }
 }

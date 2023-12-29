@@ -2,12 +2,14 @@ package com.cooba.task;
 
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
+import org.quartz.SimpleScheduleBuilder;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.quartz.SchedulerFactoryBeanCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 
 import static org.quartz.CronScheduleBuilder.cronSchedule;
 
@@ -16,7 +18,7 @@ public class TaskManageConfig {
     @Bean
     public SchedulerFactoryBeanCustomizer schedulerFactoryBeanCustomizer(JobDetail[] jobDetails, Trigger[] triggers) {
         return schedulerFactoryBean -> {
-//            schedulerFactoryBean.setConfigLocation(new ClassPathResource("quartz.properties"));
+            schedulerFactoryBean.setConfigLocation(new ClassPathResource("quartz.properties"));
             schedulerFactoryBean.setOverwriteExistingJobs(true);
             schedulerFactoryBean.setAutoStartup(true);
             schedulerFactoryBean.setJobDetails(jobDetails);
