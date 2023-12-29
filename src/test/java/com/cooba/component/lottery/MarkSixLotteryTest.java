@@ -1,37 +1,32 @@
 package com.cooba.component.lottery;
 
+import com.cooba.component.numberGenerator.SimpleNumberGenerator;
 import com.cooba.component.playRule.ColorRule;
 import com.cooba.component.playRule.GuessPositionNRule;
 import com.cooba.component.playRule.PositionNTwoSideRule;
 import com.cooba.component.playRule.SelectNNotMatchRule;
 import com.cooba.component.playRule.SelectNRule;
 import com.cooba.component.playRule.SumRule;
+import com.cooba.config.PlayRuleScan;
 import com.cooba.enums.GameRuleEnum;
 import com.cooba.object.PlayParameter;
 import com.cooba.object.PlayResult;
+import com.cooba.repository.FakeLotteryNumberRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {MarkSixLottery.class, SimpleNumberGenerator.class, FakeLotteryNumberRepository.class, PlayRuleScan.class})
 class MarkSixLotteryTest {
-    private static MarkSixLottery markSixLottery;
-
-    @BeforeAll
-    public static void init() {
-        markSixLottery = new MarkSixLottery(List.of(
-                new ColorRule(),
-                new GuessPositionNRule(),
-                new PositionNTwoSideRule(),
-                new SelectNRule(),
-                new SelectNNotMatchRule(),
-                new SumRule()
-        ), lotteryNumberRepository);
-    }
+    @Autowired
+    private MarkSixLottery markSixLottery;
 
     @Test
     public void test() {

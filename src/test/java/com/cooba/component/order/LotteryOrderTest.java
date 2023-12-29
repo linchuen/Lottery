@@ -1,5 +1,7 @@
 package com.cooba.component.order;
 
+import com.cooba.component.lottery.Lottery;
+import com.cooba.component.lottery.LotteryFactory;
 import com.cooba.entity.OrderEntity;
 import com.cooba.enums.GameRuleEnum;
 import com.cooba.enums.LotteryEnum;
@@ -17,7 +19,11 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Optional;
+
+import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
 class LotteryOrderTest {
@@ -26,7 +32,9 @@ class LotteryOrderTest {
     @Spy
     GameCodeUtility gameCodeUtility;
     @Mock
-    LotteryNumberRepository lotteryNumberRepository;
+    LotteryFactory lotteryFactory;
+    @Mock
+    Lottery lottery;
 
     @Test
     public void checkWallet() {
@@ -98,7 +106,8 @@ class LotteryOrderTest {
         testOrder.setBetAmount(BigDecimal.ONE);
         testOrder.setGameCode(gameCode);
         testOrder.setRound(1);
-        Mockito.when(lotteryNumberRepository.getNextRound(LotteryEnum.MarkSix.getId())).thenReturn(2L);
+        Mockito.when(lotteryFactory.getLottery(LotteryEnum.MarkSix.getId())).thenReturn(Optional.ofNullable(lottery));
+        Mockito.when(lottery.calculateNextRound(any(LocalDateTime.class))).thenReturn(2L);
 
         boolean result = lotteryOrder.valid(testOrder);
 
@@ -122,7 +131,8 @@ class LotteryOrderTest {
         betRequest.setGuessNumbers(Collections.emptyList());
         betRequest.setBetAmount(BigDecimal.ONE);
         OrderEntity testOrder = lotteryOrder.generate(betRequest);
-        Mockito.when(lotteryNumberRepository.getNextRound(LotteryEnum.MarkSix.getId())).thenReturn(1L);
+        Mockito.when(lotteryFactory.getLottery(LotteryEnum.MarkSix.getId())).thenReturn(Optional.ofNullable(lottery));
+        Mockito.when(lottery.calculateNextRound(any(LocalDateTime.class))).thenReturn(1L);
 
         boolean result = lotteryOrder.valid(testOrder);
 

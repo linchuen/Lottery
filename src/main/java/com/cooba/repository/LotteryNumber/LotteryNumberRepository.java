@@ -1,7 +1,7 @@
 package com.cooba.repository.LotteryNumber;
 
-public interface LotteryNumberRepository {
-    Long getNextRound(int lotteryId);
+import java.util.List;
 
-    Long getLastRound(int lotteryId);
+public interface LotteryNumberRepository {
+    boolean insertNumber(int lotteryId, long round, List<Integer> winningNumbers);
 }

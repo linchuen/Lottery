@@ -1,5 +1,6 @@
 package com.cooba.component.numberGenerator;
 
+import com.cooba.enums.LotteryNumberEnum;
 import org.springframework.stereotype.Component;
 
 import java.security.SecureRandom;
@@ -15,10 +16,15 @@ public class SimpleNumberGenerator implements NumberGenerator {
     private final Random random = new SecureRandom();
 
     @Override
+    public List<Integer> generate(LotteryNumberEnum numberEnum) {
+        return generate(numberEnum.getMin(), numberEnum.getMax(), numberEnum.getLength(), numberEnum.isRepeat());
+    }
+
+    @Override
     public List<Integer> generate(int min, int max, int length, boolean isRepeat) {
-        if (isRepeat){
+        if (isRepeat) {
             return generateRepeatNumbers(min, max, length);
-        }else {
+        } else {
             return generateNotRepeatNumbers(min, max, length);
         }
     }
