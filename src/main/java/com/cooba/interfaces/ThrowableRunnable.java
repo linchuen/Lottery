@@ -1,4 +1,4 @@
-package com.cooba.others;
+package com.cooba.interfaces;
 
 @FunctionalInterface
 public interface ThrowableRunnable {

@@ -1,7 +1,7 @@
 package com.cooba.util;
 
 import com.cooba.exception.NoLockException;
-import com.cooba.others.ThrowableRunnable;
+import com.cooba.interfaces.ThrowableRunnable;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;

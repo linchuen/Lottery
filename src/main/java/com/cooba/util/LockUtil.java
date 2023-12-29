@@ -1,6 +1,6 @@
 package com.cooba.util;
 
-import com.cooba.others.ThrowableRunnable;
+import com.cooba.interfaces.ThrowableRunnable;
 
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;

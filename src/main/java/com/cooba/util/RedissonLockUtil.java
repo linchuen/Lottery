@@ -1,7 +1,7 @@
 package com.cooba.util;
 
 import com.cooba.exception.NoLockException;
-import com.cooba.others.ThrowableRunnable;
+import com.cooba.interfaces.ThrowableRunnable;
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;

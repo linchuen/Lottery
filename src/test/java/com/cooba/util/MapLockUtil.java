@@ -1,7 +1,7 @@
 package com.cooba.util;
 
 import com.cooba.exception.NotImplementException;
-import com.cooba.others.ThrowableRunnable;
+import com.cooba.interfaces.ThrowableRunnable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
