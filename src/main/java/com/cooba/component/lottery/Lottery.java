@@ -20,6 +20,8 @@ public interface Lottery {
 
     long calculateNextRound(LocalDateTime now);
 
+    LocalDateTime calculateNextRoundTime(LocalDateTime now);
+
     LotteryEnum getLotteryEnum();
 
     LotteryNumberEnum getLotteryNumberEnum();
