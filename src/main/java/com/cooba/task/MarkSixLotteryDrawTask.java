@@ -4,7 +4,9 @@ import com.cooba.component.admin.Admin;
 import com.cooba.component.lottery.Lottery;
 import com.cooba.object.WinningNumberInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -12,7 +14,7 @@ import java.time.ZoneOffset;
 
 @Slf4j
 @Service
-public class MarkSixLotteryDrawTask implements Task {
+public class MarkSixLotteryDrawTask extends QuartzJobBean implements Task {
     private final Lottery lottery;
     private final Admin lotterySystem;
 
@@ -49,7 +51,8 @@ public class MarkSixLotteryDrawTask implements Task {
     }
 
     @Override
-    public <T> T getCron() {
-        return null;
+    protected void executeInternal(JobExecutionContext context) {
+        log.info("開始執行 {}", context.getJobDetail().getDescription());
+        execute();
     }
 }
