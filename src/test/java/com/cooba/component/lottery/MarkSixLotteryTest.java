@@ -42,11 +42,10 @@ class MarkSixLotteryTest {
     }
 
     @Test
-    void calculateAllRound() {
+    void nextRoundCrossDate() {
         LocalDateTime startTime = LocalDateTime.of(2023, 12, 29, 0, 0, 0);
-        int totalRound = markSixLottery.getLorreryRoundEnum().getTotalRound();
 
-        long round = markSixLottery.calculateNextRound(startTime.plusHours(totalRound));
-        Assertions.assertEquals(20231230002L, round);
+        long round = markSixLottery.calculateNextRound(startTime.plusHours(23));
+        Assertions.assertEquals(20231230001L, round);
     }
 }

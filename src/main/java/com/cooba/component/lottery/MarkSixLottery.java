@@ -18,6 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -91,10 +92,17 @@ public class MarkSixLottery implements Lottery {
 
         int nowSecond = now.toLocalTime().toSecondOfDay();
         int timeDiff = nowSecond - startTimeSecond;
-        int nextRound = startNum + timeDiff / intervalSecond;
-        String dateString = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        String nextRoundString = dateString + String.format(roundEnum.getFormat(), nextRound);
-        return Long.parseLong(nextRoundString);
+        DateTimeFormatter yyyyMMdd = DateTimeFormatter.ofPattern("yyyyMMdd");
+        if (timeDiff < (int) TimeUnit.DAYS.toSeconds(1)) {
+            int nextRound = startNum + timeDiff / intervalSecond;
+            String dateString = now.format(yyyyMMdd);
+            String nextRoundString = dateString + String.format(roundEnum.getFormat(), nextRound);
+            return Long.parseLong(nextRoundString);
+        } else {
+            String dateString = now.plusDays(1).format(yyyyMMdd);
+            String nextRoundString = dateString + String.format(roundEnum.getFormat(), startNum);
+            return Long.parseLong(nextRoundString);
+        }
     }
 
 
