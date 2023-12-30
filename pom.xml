@@ -42,26 +42,11 @@
             <version>3.0.3</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.mybatis.dynamic-sql/mybatis-dynamic-sql -->
-        <dependency>
-            <groupId>org.mybatis.dynamic-sql</groupId>
-            <artifactId>mybatis-dynamic-sql</artifactId>
-            <version>1.5.0</version>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/org.mybatis/mybatis-typehandlers-jsr310 -->
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis-typehandlers-jsr310</artifactId>
             <version>1.0.2</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.mybatis.generator/mybatis-generator-core -->
-        <dependency>
-            <groupId>org.mybatis.generator</groupId>
-            <artifactId>mybatis-generator-core</artifactId>
-            <version>1.4.2</version>
             <scope>provided</scope>
         </dependency>
 
@@ -126,23 +111,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-
-            <plugin>
-                <groupId>org.mybatis.generator</groupId>
-                <artifactId>mybatis-generator-maven-plugin</artifactId>
-                <version>1.4.2</version>
-                <configuration>
-                    <verbose>true</verbose>
-                    <overwrite>false</overwrite>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.cooba</groupId>
-                        <artifactId>mybatis-plugin</artifactId>
-                        <version>1.0</version>
-                    </dependency>
-                </dependencies>
             </plugin>
         </plugins>
     </build>

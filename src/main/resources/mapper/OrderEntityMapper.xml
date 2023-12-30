@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 對應持久層的介面 -->
+<mapper namespace="com.cooba.mapper.OrderEntityMapper">
+
+    <select id="selectByPrimaryKey" resultType="com.cooba.entity.OrderEntity">
+        select * from order_entity where id = #{id}
+    </select>
+</mapper>

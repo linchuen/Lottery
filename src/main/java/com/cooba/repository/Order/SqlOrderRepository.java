@@ -1,6 +1,7 @@
 package com.cooba.repository.order;
 
 import com.cooba.entity.OrderEntity;
+import com.cooba.mapper.OrderEntityMapper;
 import com.cooba.object.SettleResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -11,13 +12,17 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 public class SqlOrderRepository implements OrderRepository {
+    private final OrderEntityMapper orderEntityMapper;
+
     @Override
     public Optional<OrderEntity> selectOrderById(long orderId) {
-        return Optional.empty();
+        return orderEntityMapper.selectByPrimaryKey(orderId);
     }
 
     @Override
     public List<OrderEntity> selectUnsettleOrder(int lotteryId, long round) {
+
+
         return null;
     }
 
