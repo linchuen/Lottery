@@ -6,4 +6,51 @@
     <select id="selectByPrimaryKey" resultType="com.cooba.entity.OrderEntity">
         select * from order_entity where id = #{id}
     </select>
+
+    <select id="selectLotteryByStatus" resultType="com.cooba.entity.OrderEntity">
+        select * from order_entity
+        where lottery_id = #{lotteryId}
+        and round = #{round}
+        and status = #{status}
+    </select>
+
+    <update id="updateSettleResult">
+        update from order_entity
+        where id = #{id}
+        set fee = #{result.fee}
+        and bet_prize = #{result.betPrize}
+        and status = #{result.status}
+        and game_status = #{result.gameStatus}
+        and updated_time = NOW()
+    </update>
+
+    <update id="updateStatus">
+        update from order_entity
+        where id = #{id}
+        set status = #{result.status}
+        and updated_time = NOW()
+    </update>
+
+    <insert id="insertInitialOrder" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.cooba.entity.OrderEntity">
+        INSERT INTO main.order_entity
+        (player_id, wallet_id, asset_id, round, game_code, guess_string, bet_amount, odds, bet_prize, fee, status,
+        game_status, created_time, updated_time)
+        VALUES(
+        #{order.playerId},
+        #{order.walletId},
+        #{order.assetId},
+        #{order.round},
+        #{order.gameCode},
+        #{order.guessString},
+        #{order.betAmount},
+        #{order.odds},
+        #{order.betPrize},
+        #{order.fee},
+        #{order.status},
+        #{order.gameStatus},
+        NOW(),
+        NOW()
+        )
+    </insert>
 </mapper>
