@@ -1,4 +1,4 @@
-package com.cooba.repository.Order;
+package com.cooba.repository.order;
 
 import com.cooba.entity.OrderEntity;
 import com.cooba.object.SettleResult;
