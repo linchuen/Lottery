@@ -8,7 +8,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class SqlPlayerWalletRepository implements PlayerWalletRepository {
+public class SqlSimpleWalletRepository implements PlayerWalletRepository {
     @Override
     public Optional<BigDecimal> selectAssetAmount(long playerId, int assetId) {
         return Optional.empty();
