@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class SqlOrderRepository implements com.cooba.repository.Order.OrderRepository {
+public class SqlOrderRepository implements OrderRepository {
     @Override
     public Optional<OrderEntity> selectOrderById(long orderId) {
         return Optional.empty();
