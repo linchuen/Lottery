@@ -50,7 +50,7 @@
 
     <insert id="insertInitialOrder" useGeneratedKeys="true" keyProperty="id"
             parameterType="com.cooba.entity.OrderEntity">
-        INSERT INTO main.order_entity
+        INSERT INTO order_entity
         (player_id, wallet_id, asset_id, round, game_code, guess_string, bet_amount, odds, bet_prize, fee, status,
         game_status, created_time, updated_time)
         VALUES(
