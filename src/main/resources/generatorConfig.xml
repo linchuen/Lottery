@@ -51,7 +51,7 @@
         <!-- 表名和生成的实体名 -->
 
         <!-- 表名和生成所有TABLE -->
-        <table tableName="account">
+        <table tableName="order_entity">
         </table>
         <table tableName="user_currency_wallet">
         </table>

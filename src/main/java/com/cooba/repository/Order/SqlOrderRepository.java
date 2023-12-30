@@ -1,4 +1,4 @@
-package com.cooba.repository.Order;
+package com.cooba.repository.order;
 
 import com.cooba.entity.OrderEntity;
 import com.cooba.object.SettleResult;
@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class SqlOrderRepository implements OrderRepository {
+public class SqlOrderRepository implements com.cooba.repository.Order.OrderRepository {
     @Override
     public Optional<OrderEntity> selectOrderById(long orderId) {
         return Optional.empty();

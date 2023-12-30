@@ -9,7 +9,7 @@ import com.cooba.enums.LotteryNumberEnum;
 import com.cooba.object.PlayParameter;
 import com.cooba.object.PlayResult;
 import com.cooba.object.WinningNumberInfo;
-import com.cooba.repository.LotteryNumber.LotteryNumberRepository;
+import com.cooba.repository.lotteryNumber.LotteryNumberRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

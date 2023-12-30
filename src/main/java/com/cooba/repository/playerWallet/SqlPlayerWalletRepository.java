@@ -1,4 +1,4 @@
-package com.cooba.repository.PlayerWallet;
+package com.cooba.repository.playerWallet;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

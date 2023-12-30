@@ -1,4 +1,4 @@
-package com.cooba.repository.LotteryNumber;
+package com.cooba.repository.lotteryNumber;
 
 import java.util.List;
 

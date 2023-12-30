@@ -1,6 +1,6 @@
 package com.cooba.repository;
 
-import com.cooba.repository.LotteryNumber.LotteryNumberRepository;
+import com.cooba.repository.lotteryNumber.LotteryNumberRepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

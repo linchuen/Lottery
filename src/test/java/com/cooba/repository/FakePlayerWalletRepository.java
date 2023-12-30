@@ -1,6 +1,6 @@
 package com.cooba.repository;
 
-import com.cooba.repository.PlayerWallet.PlayerWalletRepository;
+import com.cooba.repository.playerWallet.PlayerWalletRepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.stereotype.Repository;
