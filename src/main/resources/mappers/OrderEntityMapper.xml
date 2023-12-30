@@ -2,12 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- namespace 對應持久層的介面 -->
 <mapper namespace="com.cooba.mapper.OrderEntityMapper">
+    <resultMap type="com.cooba.entity.OrderEntity" id="order">
+        <result column="id" property="id"/>
+        <result column="player_id" property="playerId"/>
+        <result column="wallet_id" property="walletId"/>
+        <result column="asset_id" property="assetId"/>
+        <result column="round" property="round"/>
+        <result column="game_code" property="gameCode"/>
+        <result column="guess_string" property="guessString"/>
+        <result column="bet_amount" property="betAmount"/>
+        <result column="odds" property="odds"/>
+        <result column="bet_prize" property="betPrize"/>
+        <result column="fee" property="fee"/>
+        <result column="status" property="status"/>
+        <result column="game_status" property="gameStatus"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="updated_time" property="updatedTime"/>
+    </resultMap>
 
-    <select id="selectByPrimaryKey" resultType="com.cooba.entity.OrderEntity">
+    <select id="selectByPrimaryKey" resultMap="order">
         select * from order_entity where id = #{id}
     </select>
 
-    <select id="selectLotteryByStatus" resultType="com.cooba.entity.OrderEntity">
+    <select id="selectLotteryByStatus" resultMap="order">
         select * from order_entity
         where lottery_id = #{lotteryId}
         and round = #{round}
