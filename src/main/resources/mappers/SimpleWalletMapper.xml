@@ -26,9 +26,11 @@
     </insert>
 
     <update id="updateAsset">
-        update from simple_wallet
-        set amount = #{amount}
-        and updated_time = NOW()
+        update main.simple_wallet
+        set amount = #{amount},
+        updated_time = NOW()
+        WHERE player_id = #{playerId}
+        AND asset_id = #{assetId};
     </update>
 
 </mapper>
