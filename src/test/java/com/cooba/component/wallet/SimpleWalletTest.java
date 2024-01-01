@@ -125,4 +125,9 @@ class SimpleWalletTest {
         }).count();
         Assertions.assertEquals(1000, successTime);
     }
+
+    @Test
+    void withdrawAssetWithNoWalletAndInsufficientBalance() {
+        Assertions.assertThrows(InsufficientBalanceException.class, () -> simpleWallet.decreaseAsset(5L, 1, BigDecimal.ONE));
+    }
 }

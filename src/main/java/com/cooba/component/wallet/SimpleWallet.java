@@ -47,7 +47,7 @@ public class SimpleWallet implements Wallet {
                 Optional<BigDecimal> balance = playerWalletRepository.selectAssetAmount(playerId, assetId);
 
                 if (balance.isEmpty()) {
-                    playerWalletRepository.insertAssetAmount(playerId, assetId, BigDecimal.ZERO);
+                    throw new InsufficientBalanceException();
                 } else {
                     BigDecimal newBalance = balance.get().subtract(amount);
 

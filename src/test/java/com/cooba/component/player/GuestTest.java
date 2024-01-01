@@ -4,10 +4,14 @@ import com.cooba.component.order.Order;
 import com.cooba.component.wallet.Wallet;
 import com.cooba.component.wallet.WalletFactory;
 import com.cooba.entity.OrderEntity;
+import com.cooba.enums.AssetEnum;
+import com.cooba.enums.WalletEnum;
 import com.cooba.exception.InsufficientBalanceException;
 import com.cooba.object.BetResult;
+import com.cooba.object.CreatePlayerResult;
 import com.cooba.repository.FakeOrderRepository;
 import com.cooba.request.BetRequest;
+import com.cooba.request.CreatePlayerRequest;
 import com.cooba.util.MapLockUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -114,5 +118,16 @@ class GuestTest {
         Assertions.assertTrue(betResult1.isSuccess());
         Assertions.assertFalse(betResult2.isSuccess());
         Assertions.assertTrue(betResult3.isSuccess());
+    }
+
+    @Test
+    void create() {
+        Mockito.when(walletFactory.getWallet(anyInt())).thenReturn(Optional.of(wallet));
+
+        CreatePlayerResult result = guest.create(new CreatePlayerRequest());
+
+        Assertions.assertEquals(WalletEnum.SIMPLE.getId(), result.getWalletId());
+        Assertions.assertEquals(AssetEnum.TWD.getId(), result.getAssetId());
+        Assertions.assertEquals(BigDecimal.valueOf(2000), result.getAmount());
     }
 }
