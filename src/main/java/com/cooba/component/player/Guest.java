@@ -4,14 +4,20 @@ import com.cooba.component.order.Order;
 import com.cooba.component.wallet.Wallet;
 import com.cooba.component.wallet.WalletFactory;
 import com.cooba.entity.OrderEntity;
+import com.cooba.enums.AssetEnum;
+import com.cooba.enums.WalletEnum;
 import com.cooba.object.BetResult;
+import com.cooba.object.CreatePlayerResult;
 import com.cooba.repository.order.OrderRepository;
 import com.cooba.request.BetRequest;
+import com.cooba.request.CreatePlayerRequest;
 import com.cooba.util.LockUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.security.SecureRandom;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
@@ -22,6 +28,24 @@ public class Guest implements Player {
     private final WalletFactory walletFactory;
     private final OrderRepository orderRepository;
     private final LockUtil lockUtil;
+
+    @Override
+    public CreatePlayerResult create(CreatePlayerRequest createRequest) {
+        Random random = new SecureRandom();
+        long playerId = random.nextInt(100) + 1;
+
+        Wallet wallet = walletFactory.getWallet(WalletEnum.SIMPLE.getId()).orElseThrow();
+        int assetId = AssetEnum.TWD.getId();
+        BigDecimal amount = BigDecimal.valueOf(2000);
+        wallet.increaseAsset(playerId, assetId, amount);
+
+        return CreatePlayerResult.builder()
+                .playerId(playerId)
+                .walletId(WalletEnum.SIMPLE.getId())
+                .assetId(assetId)
+                .amount(amount)
+                .build();
+    }
 
     @Override
     public BetResult bet(long playerId, BetRequest betRequest) {

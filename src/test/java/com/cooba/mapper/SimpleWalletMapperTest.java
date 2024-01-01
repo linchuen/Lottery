@@ -30,30 +30,29 @@ class SimpleWalletMapperTest {
 
     @Test
     void insert() {
-        SimpleWalletEntity walletEntity = Instancio.create(SimpleWalletEntity.class);
-        long playerId = walletEntity.getPlayerId();
-        int assetId = walletEntity.getAssetId();
+        long playerId = Instancio.create(Long.class);
+        int assetId = Instancio.create(Integer.class);
+        BigDecimal amount = Instancio.create(BigDecimal.class);
 
-        simpleWalletMapper.insertAsset(walletEntity);
+        simpleWalletMapper.insertAsset(playerId, assetId, amount);
 
         SimpleWalletEntity result = simpleWalletMapper.selectPlayerAsset(playerId, assetId).orElseThrow();
         System.out.println(result);
-        Assertions.assertTrue(result.getAmount().compareTo(walletEntity.getAmount()) == 0);
+        Assertions.assertTrue(result.getAmount().compareTo(amount) == 0);
     }
 
     @Test
     void update() {
-        SimpleWalletEntity walletEntity = Instancio.create(SimpleWalletEntity.class);
-        long playerId = walletEntity.getPlayerId();
-        int assetId = walletEntity.getAssetId();
+        long playerId = Instancio.create(Long.class);
+        int assetId = Instancio.create(Integer.class);
+        BigDecimal amount = Instancio.create(BigDecimal.class);
 
-        simpleWalletMapper.insertAsset(walletEntity);
-        walletEntity.setAmount(BigDecimal.TEN);
-        simpleWalletMapper.updateAsset(walletEntity);
+        simpleWalletMapper.insertAsset(playerId, assetId, amount);
+        simpleWalletMapper.updateAsset(playerId, assetId, BigDecimal.TEN);
 
 
         SimpleWalletEntity result = simpleWalletMapper.selectPlayerAsset(playerId, assetId).orElseThrow();
         System.out.println(result);
-        Assertions.assertTrue(result.getAmount().compareTo(walletEntity.getAmount()) == 0);
+        Assertions.assertTrue(result.getAmount().compareTo(BigDecimal.TEN) == 0);
     }
 }
