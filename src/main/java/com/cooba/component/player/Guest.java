@@ -6,11 +6,13 @@ import com.cooba.component.wallet.WalletFactory;
 import com.cooba.entity.OrderEntity;
 import com.cooba.enums.AssetEnum;
 import com.cooba.enums.WalletEnum;
+import com.cooba.exception.InsufficientBalanceException;
 import com.cooba.object.BetResult;
 import com.cooba.object.CreatePlayerResult;
 import com.cooba.repository.order.OrderRepository;
 import com.cooba.request.BetRequest;
 import com.cooba.request.CreatePlayerRequest;
+import com.cooba.request.WalletRequest;
 import com.cooba.util.LockUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -92,5 +94,25 @@ public class Guest implements Player {
         betResult.setErrorMessage(msg);
         betResult.addBetRequestAttribute(betRequest);
         return betResult;
+    }
+
+    @Override
+    public void deposit(long playerId, WalletRequest walletRequest) {
+        int walletId = walletRequest.getWalletId();
+        int assetId = walletRequest.getAssetId();
+        BigDecimal amount = walletRequest.getAmount();
+
+        Wallet wallet = walletFactory.getWallet(walletId).orElseThrow();
+        wallet.increaseAsset(playerId, assetId, amount);
+    }
+
+    @Override
+    public void withdraw(long playerId, WalletRequest walletRequest) throws InsufficientBalanceException {
+        int walletId = walletRequest.getWalletId();
+        int assetId = walletRequest.getAssetId();
+        BigDecimal amount = walletRequest.getAmount();
+
+        Wallet wallet = walletFactory.getWallet(walletId).orElseThrow();
+        wallet.decreaseAsset(playerId, assetId, amount);
     }
 }
