@@ -4,6 +4,7 @@ import com.cooba.component.player.Player;
 import com.cooba.exception.InsufficientBalanceException;
 import com.cooba.object.BetResult;
 import com.cooba.object.CreatePlayerResult;
+import com.cooba.object.PlayerWalletResult;
 import com.cooba.request.BetRequest;
 import com.cooba.request.CreatePlayerRequest;
 import com.cooba.request.WalletRequest;
@@ -34,14 +35,14 @@ public class PlayerController {
     }
 
     @PostMapping("deposit/{playerId}")
-    public ResponseEntity<?> deposit(@PathVariable long playerId, @RequestBody WalletRequest walletRequest) {
-        player.deposit(playerId, walletRequest);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<PlayerWalletResult> deposit(@PathVariable long playerId, @RequestBody WalletRequest walletRequest) {
+        PlayerWalletResult walletResult = player.deposit(playerId, walletRequest);
+        return ResponseEntity.ok(walletResult);
     }
 
     @PostMapping("withdraw/{playerId}")
-    public ResponseEntity<?> withdraw(@PathVariable long playerId, @RequestBody WalletRequest walletRequest) throws InsufficientBalanceException {
-        player.withdraw(playerId, walletRequest);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<PlayerWalletResult> withdraw(@PathVariable long playerId, @RequestBody WalletRequest walletRequest) throws InsufficientBalanceException {
+        PlayerWalletResult walletResult = player.withdraw(playerId, walletRequest);
+        return ResponseEntity.ok(walletResult);
     }
 }
