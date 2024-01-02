@@ -1,5 +1,7 @@
 package com.cooba.component.admin;
 
+import com.cooba.component.numberGenerator.NumberGenerator;
+import com.cooba.component.numberGenerator.SimpleNumberGenerator;
 import com.cooba.component.wallet.Wallet;
 import com.cooba.component.wallet.WalletFactory;
 import com.cooba.config.LotteryScan;
@@ -15,6 +17,7 @@ import com.cooba.object.SettleResult;
 import com.cooba.object.WinningNumberInfo;
 import com.cooba.publisher.Publisher;
 import com.cooba.repository.FakeOrderRepository;
+import com.cooba.repository.lotteryNumber.LotteryNumberRepository;
 import com.cooba.util.GameCodeUtility;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,6 +56,10 @@ class LotterySystemTest {
     Wallet wallet;
     @Autowired
     FakeOrderRepository fakeOrderRepository;
+    @MockBean
+    NumberGenerator numberGenerator;
+    @MockBean
+    LotteryNumberRepository lotteryNumberRepository;
 
     @BeforeEach
     public void testDataClear() {

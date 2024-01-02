@@ -97,7 +97,7 @@ public class LotterySystem implements Admin {
                 continue;
             }
             orderRepository.updateSettleOrder(orderId, settleResult);
-            settleCompletePublisher.publishEvent(orderId);
+            settleCompletePublisher.publishEvent(String.valueOf(orderId));
         }
     }
 

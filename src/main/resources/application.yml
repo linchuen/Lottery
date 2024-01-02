@@ -27,6 +27,12 @@ mybatis:
   configuration:
     local-cache-scope: statement
 
+rabbitmq:
+  host: 127.0.0.1
+  port: 5672
+  username: root
+  password: root
+
 logging:
   level:
     com.cooba.mapper: debug
