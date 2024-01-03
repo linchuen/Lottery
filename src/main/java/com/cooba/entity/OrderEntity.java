@@ -12,6 +12,7 @@ public class OrderEntity {
     private long playerId;
     private int walletId;
     private int assetId;
+    private int lotteryId;
     private long round;
     private String gameCode;
     private String guessString;

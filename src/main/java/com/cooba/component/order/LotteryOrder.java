@@ -26,12 +26,16 @@ public class LotteryOrder implements Order {
 
     @Override
     public OrderEntity generate(BetRequest betRequest) {
+        String gameCode = betRequest.getGameCode();
+        int lotteryId = gameCodeUtility.getLotteryId(gameCode);
+
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setPlayerId(betRequest.getPlayerId());
         orderEntity.setWalletId(betRequest.getWalletId());
         orderEntity.setAssetId(betRequest.getAssetId());
+        orderEntity.setLotteryId(lotteryId);
         orderEntity.setRound(betRequest.getRound());
-        orderEntity.setGameCode(betRequest.getGameCode());
+        orderEntity.setGameCode(gameCode);
         orderEntity.setGuessNumbers(betRequest.getGuessNumbers());
         orderEntity.setBetAmount(betRequest.getBetAmount());
         orderEntity.setStatus(OrderStatusEnum.create.getCode());

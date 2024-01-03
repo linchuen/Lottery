@@ -7,6 +7,7 @@
         <result column="player_id" property="playerId"/>
         <result column="wallet_id" property="walletId"/>
         <result column="asset_id" property="assetId"/>
+        <result column="lottery_id" property="lotteryId"/>
         <result column="round" property="round"/>
         <result column="game_code" property="gameCode"/>
         <result column="guess_string" property="guessString"/>
@@ -51,12 +52,13 @@
     <insert id="insertInitialOrder" useGeneratedKeys="true" keyProperty="id"
             parameterType="com.cooba.entity.OrderEntity">
         INSERT INTO order_entity
-        (player_id, wallet_id, asset_id, round, game_code, guess_string, bet_amount, odds, bet_prize, fee, status,
+        (player_id, wallet_id, asset_id, lottery_id, round, game_code, guess_string, bet_amount, odds, bet_prize, fee, status,
         game_status, created_time, updated_time)
         VALUES(
         #{order.playerId},
         #{order.walletId},
         #{order.assetId},
+        #{order.lotteryId},
         #{order.round},
         #{order.gameCode},
         #{order.guessString},

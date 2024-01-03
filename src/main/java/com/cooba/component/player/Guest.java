@@ -84,7 +84,6 @@ public class Guest implements Player {
                 betResult.setSuccess(true);
                 return betResult;
             } catch (Exception e) {
-                e.printStackTrace();
                 log.error("扣款遇到失敗{}", e.getMessage());
                 orderRepository.updateCancelOrder(orderId);
 

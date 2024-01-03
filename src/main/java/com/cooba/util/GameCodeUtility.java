@@ -64,4 +64,8 @@ public class GameCodeUtility {
                 getIsOddCode(isOdd) +
                 getColorCode(colorEnum);
     }
+
+    public int getLotteryId(String gameCode) {
+        return Integer.parseInt(gameCode.substring(0, 3));
+    }
 }
