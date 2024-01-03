@@ -2,13 +2,14 @@ package com.cooba.component.wallet;
 
 import com.cooba.enums.WalletEnum;
 import com.cooba.exception.InsufficientBalanceException;
+import com.cooba.object.PlayerWalletResult;
 
 import java.math.BigDecimal;
 
 public interface Wallet {
-    void increaseAsset(long playerId, int assetId, BigDecimal amount);
+    PlayerWalletResult increaseAsset(long playerId, int assetId, BigDecimal amount);
 
-    void decreaseAsset(long playerId, int assetId, BigDecimal amount) throws InsufficientBalanceException;
+    PlayerWalletResult decreaseAsset(long playerId, int assetId, BigDecimal amount) throws InsufficientBalanceException;
 
     WalletEnum getWalletEnum();
 }

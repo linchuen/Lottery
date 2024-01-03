@@ -108,13 +108,7 @@ public class Guest implements Player {
         BigDecimal amount = walletRequest.getAmount();
 
         Wallet wallet = walletFactory.getWallet(walletId).orElseThrow();
-        wallet.increaseAsset(playerId, assetId, amount);
-        return PlayerWalletResult.builder()
-                .playerId(playerId)
-                .walletId(walletId)
-                .assetId(assetId)
-                .amount(amount)
-                .build();
+        return wallet.increaseAsset(playerId, assetId, amount);
     }
 
     @Override
@@ -125,12 +119,6 @@ public class Guest implements Player {
         BigDecimal amount = walletRequest.getAmount();
 
         Wallet wallet = walletFactory.getWallet(walletId).orElseThrow();
-        wallet.decreaseAsset(playerId, assetId, amount);
-        return PlayerWalletResult.builder()
-                .playerId(playerId)
-                .walletId(walletId)
-                .assetId(assetId)
-                .amount(amount)
-                .build();
+        return wallet.decreaseAsset(playerId, assetId, amount);
     }
 }
