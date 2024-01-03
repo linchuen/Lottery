@@ -40,7 +40,7 @@ public class TaskManageConfig {
         return TriggerBuilder.newTrigger()
                 .forJob(jobDetail)
                 .withIdentity("markSixLotteryDrawTaskTrigger")
-                .withSchedule(cronSchedule("55 59 * ? * *"))
+                .withSchedule(cronSchedule("55 29,59 * ? * *"))
                 .build();
     }
 }

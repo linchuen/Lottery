@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 @Getter
 public enum LorreryRoundEnum {
-    MarkSix(LocalTime.of(0, 0, 0), LocalTime.of(23, 0, 0), 1, TimeUnit.HOURS, 24, 1, "%03d");
+    MarkSix(LocalTime.of(0, 0, 0), LocalTime.of(23, 30, 0), 30, TimeUnit.MINUTES, 24, 1, "%03d");
 
     private final LocalTime start;
     private final LocalTime end;
