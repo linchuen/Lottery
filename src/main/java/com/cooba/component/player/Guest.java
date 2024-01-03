@@ -17,6 +17,7 @@ import com.cooba.request.WalletRequest;
 import com.cooba.util.LockUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.security.SecureRandom;
@@ -33,6 +34,7 @@ public class Guest implements Player {
     private final LockUtil lockUtil;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public CreatePlayerResult create(CreatePlayerRequest createRequest) {
         Random random = new SecureRandom();
         long playerId = random.nextInt(100) + 1;
@@ -51,6 +53,7 @@ public class Guest implements Player {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public BetResult bet(long playerId, BetRequest betRequest) {
         String key = playerId + betRequest.getGameCode();
         Supplier<BetResult> betProcess = () -> {
@@ -98,6 +101,7 @@ public class Guest implements Player {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public PlayerWalletResult deposit(long playerId, WalletRequest walletRequest) {
         int walletId = walletRequest.getWalletId();
         int assetId = walletRequest.getAssetId();
@@ -114,6 +118,7 @@ public class Guest implements Player {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public PlayerWalletResult withdraw(long playerId, WalletRequest walletRequest) throws InsufficientBalanceException {
         int walletId = walletRequest.getWalletId();
         int assetId = walletRequest.getAssetId();

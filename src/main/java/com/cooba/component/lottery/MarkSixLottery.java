@@ -12,6 +12,7 @@ import com.cooba.object.WinningNumberInfo;
 import com.cooba.repository.lotteryNumber.LotteryNumberRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -63,6 +64,7 @@ public class MarkSixLottery implements Lottery {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Optional<WinningNumberInfo> generateNextRoundNumbers(LocalDateTime time) {
         long nextRound = calculateNextRound(time);
 

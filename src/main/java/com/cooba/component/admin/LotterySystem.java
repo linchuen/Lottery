@@ -19,6 +19,7 @@ import com.cooba.util.GameCodeUtility;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -80,6 +81,7 @@ public class LotterySystem implements Admin {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void settleOrders(WinningNumberInfo winningNumberInfo) {
         int lotteryId = winningNumberInfo.getLotteryId();
         long round = winningNumberInfo.getRound();
@@ -102,6 +104,7 @@ public class LotterySystem implements Admin {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void sendLotteryPrize(long orderId) {
         OrderEntity orderEntity = orderRepository.selectOrderById(orderId).orElseThrow();
         if (orderEntity.getStatus() != OrderStatusEnum.settle.getCode()) {
