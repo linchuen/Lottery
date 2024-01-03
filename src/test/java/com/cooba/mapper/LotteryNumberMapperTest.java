@@ -25,7 +25,7 @@ class LotteryNumberMapperTest {
 
     @Test
     void insertNumbers() {
-        int result = lotteryNumberMapper.insertNumbers(Instancio.create(Integer.class), Instancio.create(Long.class), Instancio.create(String.class));
+        int result = lotteryNumberMapper.insertNumbers(Instancio.create(Integer.class), Instancio.create(Long.class), "[41,,42,43,44,45,46,47]");
         System.out.println(result);
         Assertions.assertEquals(1, result);
     }
