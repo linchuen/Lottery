@@ -16,6 +16,7 @@ import com.cooba.request.CreatePlayerRequest;
 import com.cooba.request.WalletRequest;
 import com.cooba.util.LockUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,7 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class Guest implements Player {
@@ -82,6 +84,8 @@ public class Guest implements Player {
                 betResult.setSuccess(true);
                 return betResult;
             } catch (Exception e) {
+                e.printStackTrace();
+                log.error("扣款遇到失敗{}", e.getMessage());
                 orderRepository.updateCancelOrder(orderId);
 
                 betResult.setSuccess(false);

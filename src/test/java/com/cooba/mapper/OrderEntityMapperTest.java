@@ -2,6 +2,7 @@ package com.cooba.mapper;
 
 import com.cooba.config.DataSourceConfig;
 import com.cooba.entity.OrderEntity;
+import com.cooba.enums.OrderStatusEnum;
 import org.instancio.Instancio;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
@@ -11,6 +12,7 @@ import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @Disabled
@@ -33,5 +35,16 @@ class OrderEntityMapperTest {
         OrderEntity result = orderEntityMapper.selectByPrimaryKey(id).orElseThrow();
         System.out.println(result);
         Assertions.assertNull(result.getGuessNumbers());
+    }
+
+    @Test
+    void update(){
+        OrderEntity orderEntity = Instancio.create(OrderEntity.class);
+        orderEntityMapper.insertInitialOrder(orderEntity);
+        Long id = orderEntity.getId();
+        System.out.println(id);
+        Assertions.assertNotNull(id);
+
+        orderEntityMapper.updateStatus(id, OrderStatusEnum.settle.getCode());
     }
 }
