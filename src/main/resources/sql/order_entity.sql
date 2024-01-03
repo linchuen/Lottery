@@ -6,7 +6,7 @@ CREATE TABLE `order_entity` (
   `lottery_id` int(11) DEFAULT NULL,
   `round` bigint(20) DEFAULT NULL,
   `game_code` varchar(20) DEFAULT NULL,
-  `guess_string` varchar(20) DEFAULT NULL,
+  `guess_string` varchar(30) DEFAULT NULL,
   `bet_amount` decimal(16,4) DEFAULT NULL,
   `odds` decimal(16,4) DEFAULT NULL,
   `bet_prize` decimal(16,4) DEFAULT NULL,
