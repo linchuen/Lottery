@@ -51,9 +51,10 @@ class GuestTest {
     @Test
     public void betWithOrderNotValid() {
         BetRequest testBetRequest = new BetRequest();
+        testBetRequest.setPlayerId(1);
         Mockito.when(order.valid(any(OrderEntity.class))).thenReturn(false);
 
-        BetResult betResult = guest.bet(1, testBetRequest);
+        BetResult betResult = guest.bet(testBetRequest);
 
         Assertions.assertFalse(betResult.isSuccess());
         Assertions.assertEquals("驗證失敗", betResult.getErrorMessage());
@@ -62,6 +63,7 @@ class GuestTest {
     @Test
     public void betWithDecreaseMoneyError() throws Exception {
         BetRequest testBetRequest = new BetRequest();
+        testBetRequest.setPlayerId(2);
         testBetRequest.setWalletId(1);
         testBetRequest.setAssetId(1);
         testBetRequest.setBetAmount(BigDecimal.ONE);
@@ -73,7 +75,7 @@ class GuestTest {
         Mockito.doThrow(new InsufficientBalanceException())
                 .when(wallet).decreaseAsset(anyLong(), anyInt(), any(BigDecimal.class));
 
-        BetResult betResult = guest.bet(2, testBetRequest);
+        BetResult betResult = guest.bet(testBetRequest);
 
         Assertions.assertFalse(betResult.isSuccess());
         Assertions.assertNotEquals("驗證失敗", betResult.getErrorMessage());
@@ -82,6 +84,7 @@ class GuestTest {
     @Test
     public void betSuccess() {
         BetRequest testBetRequest = new BetRequest();
+        testBetRequest.setPlayerId(3);
         testBetRequest.setWalletId(1);
         testBetRequest.setAssetId(1);
         testBetRequest.setBetAmount(BigDecimal.ONE);
@@ -91,7 +94,7 @@ class GuestTest {
         Mockito.when(order.valid(any(OrderEntity.class))).thenReturn(true);
         Mockito.when(walletFactory.getWallet(anyInt())).thenReturn(Optional.of(wallet));
 
-        BetResult betResult = guest.bet(3, testBetRequest);
+        BetResult betResult = guest.bet(testBetRequest);
 
         Assertions.assertTrue(betResult.isSuccess());
         Assertions.assertNull(betResult.getErrorMessage());
@@ -100,6 +103,7 @@ class GuestTest {
     @Test
     public void betTwiceContinuously() throws ExecutionException, InterruptedException {
         BetRequest testBetRequest = new BetRequest();
+        testBetRequest.setPlayerId(4);
         testBetRequest.setWalletId(1);
         testBetRequest.setAssetId(1);
         testBetRequest.setBetAmount(BigDecimal.ONE);
@@ -110,10 +114,10 @@ class GuestTest {
         Mockito.when(walletFactory.getWallet(anyInt())).thenReturn(Optional.of(wallet));
 
         ExecutorService executorService = Executors.newFixedThreadPool(10);
-        BetResult betResult1 = CompletableFuture.supplyAsync(() -> guest.bet(4, testBetRequest), executorService).get();
-        BetResult betResult2 = CompletableFuture.supplyAsync(() -> guest.bet(4, testBetRequest), executorService).get();
+        BetResult betResult1 = CompletableFuture.supplyAsync(() -> guest.bet(testBetRequest), executorService).get();
+        BetResult betResult2 = CompletableFuture.supplyAsync(() -> guest.bet(testBetRequest), executorService).get();
         Thread.sleep(3000);
-        BetResult betResult3 = CompletableFuture.supplyAsync(() -> guest.bet(4, testBetRequest), executorService).get();
+        BetResult betResult3 = CompletableFuture.supplyAsync(() -> guest.bet(testBetRequest), executorService).get();
 
         Assertions.assertTrue(betResult1.isSuccess());
         Assertions.assertFalse(betResult2.isSuccess());

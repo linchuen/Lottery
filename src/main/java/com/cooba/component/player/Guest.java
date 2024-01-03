@@ -54,7 +54,8 @@ public class Guest implements Player {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public BetResult bet(long playerId, BetRequest betRequest) {
+    public BetResult bet(BetRequest betRequest) {
+        long playerId = betRequest.getPlayerId();
         String key = playerId + betRequest.getGameCode();
         Supplier<BetResult> betProcess = () -> {
             OrderEntity newOrder = order.generate(betRequest);

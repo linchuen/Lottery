@@ -28,9 +28,9 @@ public class PlayerController {
         return ResponseEntity.ok(createPlayerResult);
     }
 
-    @PostMapping("bet/{playerId}")
-    public ResponseEntity<BetResult> bet(@PathVariable long playerId, @RequestBody BetRequest betRequest) {
-        BetResult betResult = player.bet(playerId, betRequest);
+    @PostMapping("bet")
+    public ResponseEntity<BetResult> bet(@RequestBody BetRequest betRequest) {
+        BetResult betResult = player.bet(betRequest);
         return ResponseEntity.ok(betResult);
     }
 

@@ -11,7 +11,7 @@ import com.cooba.request.WalletRequest;
 public interface Player {
     CreatePlayerResult create(CreatePlayerRequest createRequest);
 
-    BetResult bet(long playerId, BetRequest betRequest);
+    BetResult bet(BetRequest betRequest);
 
     PlayerWalletResult deposit(long playerId, WalletRequest walletRequest);
 
