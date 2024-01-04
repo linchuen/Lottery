@@ -5,11 +5,16 @@ import com.cooba.enums.GameRuleEnum;
 import com.cooba.object.PlayParameter;
 import com.cooba.object.PlayResult;
 import com.cooba.object.TieResult;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
 @Component
+@RequiredArgsConstructor
 public class PositionNTwoSideRule implements PlayRule {
+    private final TwoSideCommonMethod commonMethod;
+
     @Override
     public PlayResult decideResult(List<Integer> winningNumbers, List<Integer> guessNumbers, PlayParameter playParameter) {
         assert guessNumbers.isEmpty();
@@ -22,7 +27,7 @@ public class PositionNTwoSideRule implements PlayRule {
         int number = winningNumbers.get(position - 1);
         if (number == 49) return new TieResult();
 
-        return TwoSideCommonMethod.decideTwoSideResult(isBig, isOdd, number, 25);
+        return commonMethod.decideTwoSideResult(isBig, isOdd, number, 25);
     }
 
     @Override

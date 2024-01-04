@@ -29,8 +29,8 @@ public class ForBuildBetRequestTest {
         GameCodeUtility gameCodeUtility = new GameCodeUtility();
         String gameCode = gameCodeUtility.generate(
                 LotteryEnum.MarkSix,
-                GameRuleEnum.GuessPositionN,
-                2,
+                GameRuleEnum.SelectN,
+                null,
                 null,
                 null,
                 null);
