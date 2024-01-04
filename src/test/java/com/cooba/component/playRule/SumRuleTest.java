@@ -1,24 +1,20 @@
 package com.cooba.component.playRule;
 
+import com.cooba.component.playRule.common.TwoSideCommonMethod;
 import com.cooba.object.PlayParameter;
 import com.cooba.object.PlayResult;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
 import java.util.List;
 
-@ExtendWith(MockitoExtension.class)
 class SumRuleTest {
-    @InjectMocks
-    SumRule sumRule;
+    SumRule sumRule = new SumRule(new TwoSideCommonMethod());
 
     @Test
     void checkBig() {
-        List<Integer> winningNumbers = List.of(39,40,41,42,43,44,45,46);
+        List<Integer> winningNumbers = List.of(39, 40, 41, 42, 43, 44, 45, 46);
         PlayParameter playParameter = PlayParameter.builder().isBig(true).build();
 
         PlayResult result = sumRule.decideResult(winningNumbers, Collections.emptyList(), playParameter);

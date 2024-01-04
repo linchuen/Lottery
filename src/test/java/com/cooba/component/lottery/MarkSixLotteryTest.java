@@ -39,7 +39,7 @@ class MarkSixLotteryTest {
     @Test
     public void calculateNextRound() {
         LocalDateTime localDateTime = LocalDateTime.of(2023, 12, 29, 0, 0, 0);
-        for (int i = 0; i < 59; i++) {
+        for (int i = 0; i < 29; i++) {
             long round = markSixLottery.calculateNextRound(localDateTime.plusMinutes(i));
             Assertions.assertEquals(20231229002L, round);
         }
@@ -49,7 +49,7 @@ class MarkSixLotteryTest {
     public void nextRoundCrossDay() {
         LocalDateTime startTime = LocalDateTime.of(2023, 12, 29, 0, 0, 0);
 
-        long round = markSixLottery.calculateNextRound(startTime.plusHours(23));
+        long round = markSixLottery.calculateNextRound(startTime.plusHours(23).plusMinutes(30));
         Assertions.assertEquals(20231230001L, round);
     }
 
@@ -67,9 +67,9 @@ class MarkSixLotteryTest {
     @Test
     public void calculateNextRoundTime() {
         LocalDateTime localDateTime = LocalDateTime.of(2023, 12, 29, 0, 0, 0);
-        for (int i = 0; i < 59; i++) {
+        for (int i = 0; i < 29; i++) {
             LocalDateTime result = markSixLottery.calculateNextRoundTime(localDateTime.plusMinutes(i));
-            Assertions.assertEquals(LocalDateTime.of(2023, 12, 29, 1, 0, 0), result);
+            Assertions.assertEquals(LocalDateTime.of(2023, 12, 29, 0, 30, 0), result);
         }
     }
 
@@ -77,7 +77,7 @@ class MarkSixLotteryTest {
     public void nextRoundTimeCrossDay() {
         LocalDateTime startTime = LocalDateTime.of(2023, 12, 29, 0, 0, 0);
 
-        LocalDateTime result = markSixLottery.calculateNextRoundTime(startTime.plusHours(23));
+        LocalDateTime result = markSixLottery.calculateNextRoundTime(startTime.plusHours(23).plusMinutes(30));
         Assertions.assertEquals(LocalDateTime.of(2023, 12, 30, 0, 0, 0), result);
     }
 }

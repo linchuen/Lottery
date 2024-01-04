@@ -1,5 +1,6 @@
 package com.cooba.component.playRule;
 
+import com.cooba.component.playRule.common.TwoSideCommonMethod;
 import com.cooba.object.PlayParameter;
 import com.cooba.object.PlayResult;
 import org.junit.jupiter.api.Assertions;
@@ -11,10 +12,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Collections;
 import java.util.List;
 
-@ExtendWith(MockitoExtension.class)
 class PositionNTwoSideRuleTest {
-    @InjectMocks
-    PositionNTwoSideRule positionNTwoSideRule;
+    PositionNTwoSideRule positionNTwoSideRule = new PositionNTwoSideRule(new TwoSideCommonMethod());
 
     @Test
     void checkBig() {
