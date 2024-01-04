@@ -3,10 +3,7 @@ package com.cooba.component.order;
 import com.cooba.component.lottery.Lottery;
 import com.cooba.component.lottery.LotteryFactory;
 import com.cooba.entity.OrderEntity;
-import com.cooba.enums.GameRuleEnum;
-import com.cooba.enums.LotteryEnum;
-import com.cooba.enums.OrderStatusEnum;
-import com.cooba.enums.WalletEnum;
+import com.cooba.enums.*;
 import com.cooba.object.GameInfo;
 import com.cooba.request.BetRequest;
 import com.cooba.util.GameCodeUtility;
@@ -60,7 +57,9 @@ public class LotteryOrder implements Order {
 
         if (!checkGameRule(gameInfo)) return false;
 
-        return checkRound(orderEntity.getRound(), gameInfo);
+        if (!checkRound(orderEntity.getRound(), gameInfo)) return false;
+
+        return checkValidBetTime(gameInfo);
     }
 
     private static boolean checkWallet(OrderEntity orderEntity) {
@@ -83,5 +82,12 @@ public class LotteryOrder implements Order {
         Lottery lottery = lotteryFactory.getLottery(gameInfo.getLotteryId()).orElseThrow();
         long nextRound = lottery.calculateNextRound(LocalDateTime.now());
         return round == nextRound;
+    }
+
+    private boolean checkValidBetTime(GameInfo gameInfo){
+        Lottery lottery = lotteryFactory.getLottery(gameInfo.getLotteryId()).orElseThrow();
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime nextRoundTime = lottery.calculateNextRoundTime(LocalDateTime.now());
+        return now.isBefore(nextRoundTime.minusSeconds(10));
     }
 }
