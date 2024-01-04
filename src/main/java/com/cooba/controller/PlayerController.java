@@ -8,6 +8,7 @@ import com.cooba.object.PlayerWalletResult;
 import com.cooba.request.BetRequest;
 import com.cooba.request.CreatePlayerRequest;
 import com.cooba.request.WalletRequest;
+import com.google.common.util.concurrent.RateLimiter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("player")
@@ -30,6 +33,10 @@ public class PlayerController {
 
     @PostMapping("bet")
     public ResponseEntity<BetResult> bet(@RequestBody BetRequest betRequest) {
+        RateLimiter rateLimiter = RateLimiter.create(1);
+        if (!rateLimiter.tryAcquire(1, 1, TimeUnit.SECONDS)) {
+            throw new RuntimeException("系統繁忙");
+        }
         BetResult betResult = player.bet(betRequest);
         return ResponseEntity.ok(betResult);
     }
