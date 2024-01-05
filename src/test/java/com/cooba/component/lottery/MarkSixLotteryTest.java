@@ -28,9 +28,9 @@ class MarkSixLotteryTest {
 
     @Test
     public void checkWin() {
-        List<Integer> winningNumbers = List.of(1, 2, 3, 4, 5, 6, 7);
-        List<Integer> guessNumbers = List.of(7);
-        PlayParameter playParameter = PlayParameter.builder().position(7).build();
+        List<Integer> winningNumbers = List.of(1, 2, 3, 4, 5, 6);
+        List<Integer> guessNumbers = List.of(6);
+        PlayParameter playParameter = PlayParameter.builder().position(6).build();
 
         PlayResult result = markSixLottery.checkNumbers(GameRuleEnum.GuessPositionN, winningNumbers, guessNumbers, playParameter);
         Assertions.assertTrue(result.isWin());
@@ -41,16 +41,16 @@ class MarkSixLotteryTest {
         LocalDateTime localDateTime = LocalDateTime.of(2023, 12, 29, 0, 0, 0);
         for (int i = 0; i < 29; i++) {
             long round = markSixLottery.calculateNextRound(localDateTime.plusMinutes(i));
-            Assertions.assertEquals(20231229002L, round);
+            Assertions.assertEquals(20231229002L, round,"29號第1期後的時間為第2期");
         }
     }
 
     @Test
     public void nextRoundCrossDay() {
-        LocalDateTime startTime = LocalDateTime.of(2023, 12, 29, 0, 0, 0);
+        LocalDateTime startTime = LocalDateTime.of(2023, 12, 29, 23, 30, 0);
 
-        long round = markSixLottery.calculateNextRound(startTime.plusHours(23).plusMinutes(30));
-        Assertions.assertEquals(20231230001L, round);
+        long round = markSixLottery.calculateNextRound(startTime);
+        Assertions.assertEquals(20231230001L, round,"29號最後1期的下一期為30號的第1期");
     }
 
     @Test
@@ -58,10 +58,10 @@ class MarkSixLotteryTest {
         LocalDateTime startTime = LocalDateTime.of(2023, 12, 29, 0, 0, 0);
 
         boolean firstResult = markSixLottery.generateNextRoundNumbers(startTime).isPresent();
-        Assertions.assertTrue(firstResult);
+        Assertions.assertTrue(firstResult,"第一次寫入號碼要成功");
 
         boolean secondResult = markSixLottery.generateNextRoundNumbers(startTime).isEmpty();
-        Assertions.assertTrue(secondResult);
+        Assertions.assertTrue(secondResult,"重複寫入號碼要失敗");
     }
 
     @Test
@@ -75,9 +75,9 @@ class MarkSixLotteryTest {
 
     @Test
     public void nextRoundTimeCrossDay() {
-        LocalDateTime startTime = LocalDateTime.of(2023, 12, 29, 0, 0, 0);
+        LocalDateTime startTime = LocalDateTime.of(2023, 12, 29, 23, 30, 0);
 
-        LocalDateTime result = markSixLottery.calculateNextRoundTime(startTime.plusHours(23).plusMinutes(30));
-        Assertions.assertEquals(LocalDateTime.of(2023, 12, 30, 0, 0, 0), result);
+        LocalDateTime result = markSixLottery.calculateNextRoundTime(startTime);
+        Assertions.assertEquals(LocalDateTime.of(2023, 12, 30, 0, 0, 0), result,"29號最後1期後為30號第1期開獎時間");
     }
 }

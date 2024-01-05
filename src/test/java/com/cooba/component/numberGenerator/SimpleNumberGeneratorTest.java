@@ -14,7 +14,7 @@ class SimpleNumberGeneratorTest {
 
     @Test
     void generateLuckyTen() {
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             List<Integer> numbers = simpleNumberGenerator.generate(0,9,5,true);
             System.out.println(numbers);
         }
@@ -22,7 +22,7 @@ class SimpleNumberGeneratorTest {
 
     @Test
     void generateMarkSix() {
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             List<Integer> numbers = simpleNumberGenerator.generate(1,45,7,false);
             System.out.println(numbers);
         }

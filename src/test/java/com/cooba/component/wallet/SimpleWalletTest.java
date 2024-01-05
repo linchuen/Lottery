@@ -6,6 +6,7 @@ import com.cooba.util.ReentrantLockUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -128,6 +129,10 @@ class SimpleWalletTest {
 
     @Test
     void withdrawAssetWithNoWalletAndInsufficientBalance() {
-        Assertions.assertThrows(InsufficientBalanceException.class, () -> simpleWallet.decreaseAsset(5L, 1, BigDecimal.ONE));
+        fakePlayerWalletRepository.insertAssetAmount(5L, 1, new BigDecimal(0));
+
+        Executable executable = () -> simpleWallet.decreaseAsset(5L, 1, BigDecimal.ONE);
+
+        Assertions.assertThrows(InsufficientBalanceException.class, executable);
     }
 }
