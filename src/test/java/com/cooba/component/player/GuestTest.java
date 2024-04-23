@@ -130,7 +130,7 @@ class GuestTest {
 
         CreatePlayerResult result = guest.create(new CreatePlayerRequest());
 
-        Assertions.assertEquals(WalletEnum.SIMPLE.getId(), result.getWalletId());
+        Assertions.assertEquals(WalletEnum.INNER.getId(), result.getWalletId());
         Assertions.assertEquals(AssetEnum.TWD.getId(), result.getAssetId());
         Assertions.assertEquals(BigDecimal.valueOf(2000), result.getAmount());
     }

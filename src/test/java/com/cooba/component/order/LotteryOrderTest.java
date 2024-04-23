@@ -48,7 +48,7 @@ class LotteryOrderTest {
     @Test
     public void checkBetAmount() {
         OrderEntity testOrder = new OrderEntity();
-        testOrder.setWalletId(WalletEnum.SIMPLE.getId());
+        testOrder.setWalletId(WalletEnum.INNER.getId());
         testOrder.setBetAmount(BigDecimal.ZERO);
 
         boolean result = lotteryOrder.valid(testOrder);
@@ -65,7 +65,7 @@ class LotteryOrderTest {
                 null, null, null
         );
         OrderEntity testOrder = new OrderEntity();
-        testOrder.setWalletId(WalletEnum.SIMPLE.getId());
+        testOrder.setWalletId(WalletEnum.INNER.getId());
         testOrder.setBetAmount(BigDecimal.ONE);
         testOrder.setGameCode(gameCode);
 
@@ -83,7 +83,7 @@ class LotteryOrderTest {
                 null, null, null
         );
         OrderEntity testOrder = new OrderEntity();
-        testOrder.setWalletId(WalletEnum.SIMPLE.getId());
+        testOrder.setWalletId(WalletEnum.INNER.getId());
         testOrder.setBetAmount(BigDecimal.ONE);
         testOrder.setGameCode(gameCode);
 
@@ -101,7 +101,7 @@ class LotteryOrderTest {
                 null, null, null
         );
         OrderEntity testOrder = new OrderEntity();
-        testOrder.setWalletId(WalletEnum.SIMPLE.getId());
+        testOrder.setWalletId(WalletEnum.INNER.getId());
         testOrder.setBetAmount(BigDecimal.ONE);
         testOrder.setGameCode(gameCode);
         testOrder.setRound(1);

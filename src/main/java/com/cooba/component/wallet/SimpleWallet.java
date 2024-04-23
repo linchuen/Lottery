@@ -2,7 +2,6 @@ package com.cooba.component.wallet;
 
 import com.cooba.enums.WalletEnum;
 import com.cooba.exception.InsufficientBalanceException;
-import com.cooba.interfaces.ThrowableRunnable;
 import com.cooba.object.PlayerWalletResult;
 import com.cooba.repository.playerWallet.PlayerWalletRepository;
 import com.cooba.util.LockUtil;
@@ -86,6 +85,6 @@ public class SimpleWallet implements Wallet {
 
     @Override
     public WalletEnum getWalletEnum() {
-        return WalletEnum.SIMPLE;
+        return WalletEnum.INNER;
     }
 }

@@ -41,14 +41,14 @@ public class Guest implements Player {
         Random random = new SecureRandom();
         long playerId = random.nextInt(100) + 1;
 
-        Wallet wallet = walletFactory.getWallet(WalletEnum.SIMPLE.getId()).orElseThrow();
+        Wallet wallet = walletFactory.getWallet(WalletEnum.INNER.getId()).orElseThrow();
         int assetId = AssetEnum.TWD.getId();
         BigDecimal amount = BigDecimal.valueOf(2000);
         wallet.increaseAsset(playerId, assetId, amount);
 
         return CreatePlayerResult.builder()
                 .playerId(playerId)
-                .walletId(WalletEnum.SIMPLE.getId())
+                .walletId(WalletEnum.INNER.getId())
                 .assetId(assetId)
                 .amount(amount)
                 .build();

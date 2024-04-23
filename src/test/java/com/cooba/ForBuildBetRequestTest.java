@@ -37,7 +37,7 @@ public class ForBuildBetRequestTest {
 
         BetRequest betRequest = new BetRequest();
         betRequest.setPlayerId(89);
-        betRequest.setWalletId(WalletEnum.SIMPLE.getId());
+        betRequest.setWalletId(WalletEnum.INNER.getId());
         betRequest.setAssetId(AssetEnum.TWD.getId());
         betRequest.setGameCode(gameCode);
         betRequest.setRound(nextRound);

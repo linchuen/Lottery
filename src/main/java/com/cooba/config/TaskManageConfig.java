@@ -1,5 +1,6 @@
-package com.cooba.task;
+package com.cooba.config;
 
+import com.cooba.task.MarkSixLotteryDrawTask;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.SimpleScheduleBuilder;

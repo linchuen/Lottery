@@ -1,7 +1,6 @@
 package com.cooba.component.admin;
 
 import com.cooba.component.numberGenerator.NumberGenerator;
-import com.cooba.component.numberGenerator.SimpleNumberGenerator;
 import com.cooba.component.wallet.Wallet;
 import com.cooba.component.wallet.WalletFactory;
 import com.cooba.config.LotteryScan;
@@ -211,7 +210,7 @@ class LotterySystemTest {
 
         OrderEntity testOrder = new OrderEntity();
         testOrder.setId(2);
-        testOrder.setWalletId(WalletEnum.SIMPLE.getId());
+        testOrder.setWalletId(WalletEnum.INNER.getId());
         testOrder.setStatus(OrderStatusEnum.settle.getCode());
         testOrder.setBetPrize(BigDecimal.TEN);
         fakeOrderRepository.putTestOrder(List.of(testOrder));
@@ -229,7 +228,7 @@ class LotterySystemTest {
 
         OrderEntity testOrder = new OrderEntity();
         testOrder.setId(2);
-        testOrder.setWalletId(WalletEnum.SIMPLE.getId());
+        testOrder.setWalletId(WalletEnum.INNER.getId());
         testOrder.setStatus(OrderStatusEnum.settle.getCode());
         testOrder.setBetPrize(BigDecimal.ZERO);
         fakeOrderRepository.putTestOrder(List.of(testOrder));

@@ -8,7 +8,7 @@ import java.util.Optional;
 
 @Getter
 public enum WalletEnum {
-    SIMPLE(1);
+    INNER(1);
 
     private final int id;
     private static final Map<Integer, WalletEnum> WalletEnumMap = new HashMap<>();
