@@ -1,9 +1,9 @@
 package com.cooba.config;
 
+import com.cooba.constant.CronConstant;
 import com.cooba.task.MarkSixLotteryDrawTask;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
-import org.quartz.SimpleScheduleBuilder;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,7 +15,7 @@ import org.springframework.core.io.ClassPathResource;
 import static org.quartz.CronScheduleBuilder.cronSchedule;
 
 @Configuration
-public class TaskManageConfig {
+public class ScheduleTaskConfig {
     @Bean
     public SchedulerFactoryBeanCustomizer schedulerFactoryBeanCustomizer(JobDetail[] jobDetails, Trigger[] triggers) {
         return schedulerFactoryBean -> {
@@ -41,7 +41,7 @@ public class TaskManageConfig {
         return TriggerBuilder.newTrigger()
                 .forJob(jobDetail)
                 .withIdentity("markSixLotteryDrawTaskTrigger")
-                .withSchedule(cronSchedule("55 29,59 * ? * *"))
+                .withSchedule(cronSchedule(CronConstant.markSixCron))
                 .build();
     }
 }
