@@ -7,6 +7,7 @@ import java.util.List;
 
 @Data
 public class BetRequest {
+    private String orderNo;
     private long playerId;
     private int walletId;
     private int assetId;

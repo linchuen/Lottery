@@ -37,8 +37,21 @@ public class PlayerController {
         if (!rateLimiter.tryAcquire(1, 1, TimeUnit.SECONDS)) {
             throw new RuntimeException("系統繁忙");
         }
-        BetResult betResult = player.bet(betRequest);
-        return ResponseEntity.ok(betResult);
+        try {
+            BetResult betResult = player.bet(betRequest);
+            return ResponseEntity.ok(betResult);
+        } catch (Exception e) {
+            BetResult errorBetResult = getErrorBetResult(e.getMessage(), betRequest);
+            return ResponseEntity.ok(errorBetResult);
+        }
+    }
+
+    private static BetResult getErrorBetResult(String msg, BetRequest betRequest) {
+        BetResult betResult = new BetResult();
+        betResult.setSuccess(false);
+        betResult.setErrorMessage(msg);
+        betResult.addBetRequestAttribute(betRequest);
+        return betResult;
     }
 
     @PostMapping("deposit/{playerId}")

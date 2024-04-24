@@ -27,6 +27,7 @@ public class LotteryOrder implements Order {
         int lotteryId = gameCodeUtility.getLotteryId(gameCode);
 
         OrderEntity orderEntity = new OrderEntity();
+        orderEntity.setOrderNo(betRequest.getOrderNo());
         orderEntity.setPlayerId(betRequest.getPlayerId());
         orderEntity.setWalletId(betRequest.getWalletId());
         orderEntity.setAssetId(betRequest.getAssetId());

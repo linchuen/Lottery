@@ -79,11 +79,7 @@ class SimpleWalletTest {
                 .boxed()
                 .map(integer -> {
                     Runnable runnable = () -> {
-                        try {
-                            simpleWallet.decreaseAsset(4L, 1, BigDecimal.ONE);
-                        } catch (InsufficientBalanceException e) {
-                            throw new RuntimeException(e);
-                        }
+                        simpleWallet.decreaseAsset(4L, 1, BigDecimal.ONE);
                     };
                     return CompletableFuture.runAsync(runnable, executorService);
                 }).toList();
@@ -103,12 +99,8 @@ class SimpleWalletTest {
                 .boxed()
                 .map(integer -> {
                     Supplier<Boolean> supplier = () -> {
-                        try {
-                            simpleWallet.decreaseAsset(4L, 1, BigDecimal.ONE);
-                            return true;
-                        } catch (InsufficientBalanceException e) {
-                            return false;
-                        }
+                        simpleWallet.decreaseAsset(4L, 1, BigDecimal.ONE);
+                        return true;
                     };
                     return CompletableFuture.supplyAsync(supplier, executorService);
                 }).toList();

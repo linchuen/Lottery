@@ -23,8 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Supplier;
 
 @Slf4j
 @Component
@@ -58,51 +56,26 @@ public class Guest implements Player {
     @Transactional(rollbackFor = Exception.class)
     public BetResult bet(BetRequest betRequest) {
         long playerId = betRequest.getPlayerId();
-        String key = playerId + betRequest.getGameCode();
-        Supplier<BetResult> betProcess = () -> {
-            OrderEntity newOrder = order.generate(betRequest);
-            if (!order.valid(newOrder)) {
-                return getErrorBetResult("驗證失敗", betRequest);
-            }
 
-            long orderId = orderRepository.insertNewOrder(newOrder);
+        OrderEntity newOrder = order.generate(betRequest);
+        if (!order.valid(newOrder)) {
+            throw new RuntimeException("驗證失敗");
+        }
+        int assetId = betRequest.getAssetId();
+        BigDecimal betAmount = betRequest.getBetAmount();
+        int walletId = betRequest.getWalletId();
+        Wallet wallet = walletFactory.getWallet(walletId).orElseThrow();
+        wallet.decreaseAsset(playerId, assetId, betAmount);
 
-            int assetId = betRequest.getAssetId();
-            BigDecimal betAmount = betRequest.getBetAmount();
+        long orderId = orderRepository.insertNewOrder(newOrder);
 
-            int walletId = betRequest.getWalletId();
-            Wallet wallet = walletFactory.getWallet(walletId).orElseThrow();
-
-            BetResult betResult = new BetResult();
-            betResult.setOrderId(orderId);
-            betResult.addBetRequestAttribute(betRequest);
-            try {
-                wallet.decreaseAsset(playerId, assetId, betAmount);
-
-                orderRepository.updatePayOrder(orderId);
-
-                betResult.setSuccess(true);
-                return betResult;
-            } catch (Exception e) {
-                log.error("扣款遇到失敗{}", e.getMessage());
-                orderRepository.updateCancelOrder(orderId);
-
-                betResult.setSuccess(false);
-                betResult.setErrorMessage(e.getMessage());
-                return betResult;
-            }
-        };
-        return lockUtil.tryLock(key, 1, TimeUnit.SECONDS, 3, betProcess)
-                .orElseGet(() -> getErrorBetResult("無法取得鎖", betRequest));
-    }
-
-    private static BetResult getErrorBetResult(String msg, BetRequest betRequest) {
         BetResult betResult = new BetResult();
-        betResult.setSuccess(false);
-        betResult.setErrorMessage(msg);
+        betResult.setOrderId(orderId);
         betResult.addBetRequestAttribute(betRequest);
+        betResult.setSuccess(true);
         return betResult;
     }
+
 
     @Override
     @Transactional(rollbackFor = Exception.class)

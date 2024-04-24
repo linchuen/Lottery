@@ -49,10 +49,10 @@ public class SimpleWallet implements Wallet {
     }
 
     @Override
-    public PlayerWalletResult decreaseAsset(long playerId, int assetId, BigDecimal amount) throws InsufficientBalanceException {
+    public PlayerWalletResult decreaseAsset(long playerId, int assetId, BigDecimal amount) {
         String key = this.getWalletEnum().name() + playerId + assetId;
         PlayerWalletResult.PlayerWalletResultBuilder walletResultBuilder = PlayerWalletResult.builder();
-        try {
+
             lockUtil.tryLock(key, 1, TimeUnit.SECONDS, () -> {
                 Optional<BigDecimal> balance = playerWalletRepository.selectAssetAmount(playerId, assetId);
 
@@ -69,13 +69,7 @@ public class SimpleWallet implements Wallet {
                 }
             });
 
-        } catch (InsufficientBalanceException e) {
-            log.error("wallet {} {} {} {}", playerId, assetId, amount, e.getMessage());
-            throw e;
-        } catch (Exception e) {
-            log.error("wallet {} {} {} 減少資產失敗 {}", playerId, assetId, amount, e.getMessage());
-            throw new RuntimeException(e);
-        }
+
         return walletResultBuilder
                 .playerId(playerId)
                 .walletId(getWalletEnum().getId())

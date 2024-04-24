@@ -9,6 +9,7 @@ import java.util.List;
 @Data
 public class OrderEntity {
     private long id;
+    private String orderNo;
     private long playerId;
     private int walletId;
     private int assetId;
