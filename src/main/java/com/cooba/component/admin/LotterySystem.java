@@ -99,8 +99,10 @@ public class LotterySystem implements Admin {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
     public void sendLotteryPrize(OrderEntity settledOrder) {
+        if (settledOrder.getStatus() != OrderStatusEnum.settle.getCode()) return;
+
         int walletId = settledOrder.getWalletId();
         long playerId = settledOrder.getPlayerId();
         int assetId = settledOrder.getAssetId();
@@ -108,11 +110,7 @@ public class LotterySystem implements Admin {
 
         Wallet wallet = walletFactory.getWallet(walletId).orElseThrow();
         if (betPrize.compareTo(BigDecimal.ZERO) > 0) {
-            try {
-                wallet.increaseAsset(playerId, assetId, betPrize);
-            } catch (Exception e) {
-                return;
-            }
+            wallet.increaseAsset(playerId, assetId, betPrize);
         }
         orderRepository.updateAwardOrder(settledOrder.getId());
     }

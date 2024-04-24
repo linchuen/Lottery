@@ -14,7 +14,7 @@ import com.cooba.enums.OrderStatusEnum;
 import com.cooba.enums.WalletEnum;
 import com.cooba.object.SettleResult;
 import com.cooba.object.WinningNumberInfo;
-import com.cooba.publisher.Publisher;
+
 import com.cooba.repository.FakeOrderRepository;
 import com.cooba.repository.lotteryNumber.LotteryNumberRepository;
 import com.cooba.util.GameCodeUtility;
@@ -47,8 +47,6 @@ class LotterySystemTest {
     LotterySystem lotterySystem;
     @Autowired
     GameCodeUtility gameCodeUtility;
-    @MockBean
-    Publisher publisher;
     @MockBean
     WalletFactory walletFactory;
     @MockBean
@@ -186,7 +184,6 @@ class LotterySystemTest {
 
         lotterySystem.settleOrders(winningNumberInfo);
 
-        Mockito.verify(publisher).publishEvent(any());
         OrderEntity result = fakeOrderRepository.selectOrderById(1).orElseThrow();
         Assertions.assertEquals(OrderStatusEnum.settle.getCode(), result.getStatus());
     }
@@ -199,7 +196,7 @@ class LotterySystemTest {
         testOrder.setBetPrize(BigDecimal.TEN);
         fakeOrderRepository.putTestOrder(List.of(testOrder));
 
-        lotterySystem.sendLotteryPrize(, 2, );
+        lotterySystem.sendLotteryPrize(testOrder);
 
         Mockito.verify(wallet, never()).increaseAsset(anyLong(), anyInt(), any(BigDecimal.class));
     }
@@ -215,7 +212,7 @@ class LotterySystemTest {
         testOrder.setBetPrize(BigDecimal.TEN);
         fakeOrderRepository.putTestOrder(List.of(testOrder));
 
-        lotterySystem.sendLotteryPrize(, 2, );
+        lotterySystem.sendLotteryPrize(testOrder);
 
         Mockito.verify(wallet).increaseAsset(anyLong(), anyInt(), any(BigDecimal.class));
         OrderEntity result = fakeOrderRepository.selectOrderById(2).orElseThrow();
@@ -233,7 +230,7 @@ class LotterySystemTest {
         testOrder.setBetPrize(BigDecimal.ZERO);
         fakeOrderRepository.putTestOrder(List.of(testOrder));
 
-        lotterySystem.sendLotteryPrize(, 2, );
+        lotterySystem.sendLotteryPrize(testOrder);
 
         Mockito.verify(wallet, never()).increaseAsset(anyLong(), anyInt(), any(BigDecimal.class));
         OrderEntity result = fakeOrderRepository.selectOrderById(2).orElseThrow();
