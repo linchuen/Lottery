@@ -7,22 +7,20 @@ import java.util.concurrent.TimeUnit;
 
 @Getter
 public enum LorreryRoundEnum {
-    MarkSix(LocalTime.of(0, 0, 0), LocalTime.of(23, 30, 0), 30, TimeUnit.MINUTES, 24, 1, "%03d");
+    MarkSix(LocalTime.of(0, 0, 0), LocalTime.of(23, 30, 0), 10, TimeUnit.MINUTES, 1,"%03d");
 
     private final LocalTime start;
     private final LocalTime end;
     private final int intervalTime;
     private final TimeUnit timeUnit;
-    private final int totalRound;
     private final int startRound;
     private final String format;
 
-    LorreryRoundEnum(LocalTime start, LocalTime end, int intervalTime, TimeUnit timeUnit, int totalRound, int startRound, String format) {
+    LorreryRoundEnum(LocalTime start, LocalTime end, int intervalTime, TimeUnit timeUnit, int startRound, String format) {
         this.start = start;
         this.end = end;
         this.intervalTime = intervalTime;
         this.timeUnit = timeUnit;
-        this.totalRound = totalRound;
         this.startRound = startRound;
         this.format = format;
     }
