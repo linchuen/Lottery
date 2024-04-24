@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class SimpleWallet implements Wallet {
+public class InnerWallet implements Wallet {
     private final PlayerWalletRepository playerWalletRepository;
     private final LockUtil lockUtil;
 

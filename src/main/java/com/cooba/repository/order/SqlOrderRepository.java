@@ -7,6 +7,8 @@ import com.cooba.object.SettleResult;
 import com.cooba.util.JsonUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +29,7 @@ public class SqlOrderRepository implements OrderRepository {
     }
 
     @Override
-    public List<OrderEntity> selectUnsettleOrder(int lotteryId, long round) {
+    public List<OrderEntity> selectOrderByStatus(int lotteryId, long round, OrderStatusEnum status) {
         List<OrderEntity> unsettleOrders = orderEntityMapper.selectLotteryByStatus(lotteryId, round, OrderStatusEnum.pay.getCode());
         for (OrderEntity unsettleOrder : unsettleOrders) {
             unsettleOrder.setGuessNumbers(JsonUtil.parseList(unsettleOrder.getGuessString(), Integer.class));
@@ -51,6 +53,7 @@ public class SqlOrderRepository implements OrderRepository {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public long insertNewOrder(OrderEntity orderEntity) {
         orderEntity.setGuessString(JsonUtil.toJsonString(orderEntity.getGuessNumbers()));
         orderEntityMapper.insertInitialOrder(orderEntity);
@@ -62,8 +65,4 @@ public class SqlOrderRepository implements OrderRepository {
         orderEntityMapper.updateStatus(orderId, OrderStatusEnum.pay.getCode());
     }
 
-    @Override
-    public void updateCancelOrder(long orderId) {
-        orderEntityMapper.updateStatus(orderId, OrderStatusEnum.cancel.getCode());
-    }
 }

@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @MybatisTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import(DataSourceConfig.class)
-class SimpleWalletMapperTest {
+class InnerWalletMapperTest {
     @Autowired
     SimpleWalletMapper simpleWalletMapper;
 

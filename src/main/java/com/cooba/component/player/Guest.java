@@ -5,6 +5,7 @@ import com.cooba.component.wallet.Wallet;
 import com.cooba.component.wallet.WalletFactory;
 import com.cooba.entity.OrderEntity;
 import com.cooba.enums.AssetEnum;
+import com.cooba.enums.OrderStatusEnum;
 import com.cooba.enums.WalletEnum;
 import com.cooba.exception.InsufficientBalanceException;
 import com.cooba.object.BetResult;
@@ -58,16 +59,19 @@ public class Guest implements Player {
         long playerId = betRequest.getPlayerId();
 
         OrderEntity newOrder = order.generate(betRequest);
+
         if (!order.valid(newOrder)) {
             throw new RuntimeException("驗證失敗");
         }
+        long orderId = orderRepository.insertNewOrder(newOrder);
+
         int assetId = betRequest.getAssetId();
         BigDecimal betAmount = betRequest.getBetAmount();
         int walletId = betRequest.getWalletId();
         Wallet wallet = walletFactory.getWallet(walletId).orElseThrow();
         wallet.decreaseAsset(playerId, assetId, betAmount);
 
-        long orderId = orderRepository.insertNewOrder(newOrder);
+        orderRepository.updatePayOrder(orderId);
 
         BetResult betResult = new BetResult();
         betResult.setOrderId(orderId);

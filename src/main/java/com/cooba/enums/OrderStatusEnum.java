@@ -4,7 +4,6 @@ import lombok.Getter;
 
 @Getter
 public enum OrderStatusEnum {
-    create(0),
     pay(1),
     cancel(2),
     settle(3),

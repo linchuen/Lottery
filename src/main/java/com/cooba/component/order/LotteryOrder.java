@@ -36,15 +36,16 @@ public class LotteryOrder implements Order {
         orderEntity.setGameCode(gameCode);
         orderEntity.setGuessNumbers(betRequest.getGuessNumbers());
         orderEntity.setBetAmount(betRequest.getBetAmount());
-        orderEntity.setStatus(OrderStatusEnum.create.getCode());
+        orderEntity.setStatus(OrderStatusEnum.cancel.getCode());
         return orderEntity;
     }
 
     @Override
     public boolean valid(OrderEntity orderEntity) {
-        if (!checkWallet(orderEntity)) return false;
+        boolean isWalletEmpty = WalletEnum.getWalletById(orderEntity.getWalletId()).isEmpty();
+        if (isWalletEmpty) return false;
 
-        if (!checkBetAmount(orderEntity)) return false;
+        if (orderEntity.getBetAmount().compareTo(BigDecimal.ZERO) <= 0) return false;
 
         GameInfo gameInfo;
         try {
@@ -54,29 +55,15 @@ public class LotteryOrder implements Order {
             return false;
         }
 
-        if (!checkLottery(gameInfo)) return false;
+        boolean isLotteryEmpty = LotteryEnum.getLotteryById(gameInfo.getLotteryId()).isEmpty();
+        if (isLotteryEmpty) return false;
 
-        if (!checkGameRule(gameInfo)) return false;
+        boolean isGameRuleEmpty = GameRuleEnum.getRuleById(gameInfo.getGameRuleId()).isEmpty();
+        if (isGameRuleEmpty) return false;
 
         if (!checkRound(orderEntity.getRound(), gameInfo)) return false;
 
         return checkValidBetTime(gameInfo);
-    }
-
-    private static boolean checkWallet(OrderEntity orderEntity) {
-        return WalletEnum.getWalletById(orderEntity.getWalletId()).isPresent();
-    }
-
-    private static boolean checkBetAmount(OrderEntity orderEntity) {
-        return orderEntity.getBetAmount().compareTo(BigDecimal.ZERO) > 0;
-    }
-
-    private static boolean checkLottery(GameInfo gameInfo) {
-        return LotteryEnum.getLotteryById(gameInfo.getLotteryId()).isPresent();
-    }
-
-    private static boolean checkGameRule(GameInfo gameInfo) {
-        return GameRuleEnum.getRuleById(gameInfo.getGameRuleId()).isPresent();
     }
 
     private boolean checkRound(long round, GameInfo gameInfo) {

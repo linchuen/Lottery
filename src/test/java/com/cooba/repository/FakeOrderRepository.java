@@ -33,7 +33,7 @@ public class FakeOrderRepository implements OrderRepository {
     }
 
     @Override
-    public List<OrderEntity> selectUnsettleOrder(int lotteryId, long round) {
+    public List<OrderEntity> selectOrderByStatus(int lotteryId, long round, OrderStatusEnum status) {
         return orderEntityMap.values().stream()
                 .filter(orderEntity -> gameCodeUtility.parse(orderEntity.getGameCode()).getLotteryId() == lotteryId)
                 .filter(orderEntity -> orderEntity.getRound() == round)
@@ -80,10 +80,4 @@ public class FakeOrderRepository implements OrderRepository {
         orderEntityMap.put(orderId, orderEntity);
     }
 
-    @Override
-    public void updateCancelOrder(long orderId) {
-        OrderEntity orderEntity = selectOrderById(orderId).orElseThrow();
-        orderEntity.setStatus(OrderStatusEnum.cancel.getCode());
-        orderEntityMap.put(orderId, orderEntity);
-    }
 }

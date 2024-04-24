@@ -22,10 +22,10 @@ import java.util.stream.IntStream;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@ContextConfiguration(classes = {SimpleWallet.class, FakePlayerWalletRepository.class, RedissonLockUtil.class, RedissonConfig.class})
-class SimpleWalletTest {
+@ContextConfiguration(classes = {InnerWallet.class, FakePlayerWalletRepository.class, RedissonLockUtil.class, RedissonConfig.class})
+class InnerWalletTest {
     @Autowired
-    SimpleWallet simpleWallet;
+    InnerWallet innerWallet;
     @Autowired
     FakePlayerWalletRepository fakePlayerWalletRepository;
 
@@ -33,7 +33,7 @@ class SimpleWalletTest {
     @DisplayName("單線程儲值")
     void depositAssetSingleThread() {
         for (int i = 0; i < 1000; i++) {
-            simpleWallet.increaseAsset(1L, 1, BigDecimal.ONE);
+            innerWallet.increaseAsset(1L, 1, BigDecimal.ONE);
         }
         BigDecimal result = fakePlayerWalletRepository.selectAssetAmount(1L, 1).orElseThrow();
         Assertions.assertEquals(new BigDecimal(1000), result);
@@ -48,7 +48,7 @@ class SimpleWalletTest {
                 .range(0, 1000)
                 .boxed()
                 .map(i -> CompletableFuture.runAsync(
-                        () -> simpleWallet.increaseAsset(2L, 1, BigDecimal.ONE),
+                        () -> innerWallet.increaseAsset(2L, 1, BigDecimal.ONE),
                         executorService))
                 .toList();
         CompletableFuture.allOf(completableFutureList.toArray(new CompletableFuture[0])).join();
@@ -63,7 +63,7 @@ class SimpleWalletTest {
         fakePlayerWalletRepository.insertAssetAmount(3L, 1, new BigDecimal(1000));
 
         for (int i = 0; i < 1000; i++) {
-            simpleWallet.decreaseAsset(3L, 1, BigDecimal.ONE);
+            innerWallet.decreaseAsset(3L, 1, BigDecimal.ONE);
         }
 
         BigDecimal result = fakePlayerWalletRepository.selectAssetAmount(3L, 1).orElseThrow();
@@ -80,7 +80,7 @@ class SimpleWalletTest {
                 .range(0, 1000)
                 .boxed()
                 .map(i -> CompletableFuture.runAsync(
-                        () -> simpleWallet.decreaseAsset(4L, 1, BigDecimal.ONE),
+                        () -> innerWallet.decreaseAsset(4L, 1, BigDecimal.ONE),
                         executorService))
                 .toList();
         CompletableFuture.allOf(completableFutureList.toArray(new CompletableFuture[0])).join();
@@ -93,6 +93,6 @@ class SimpleWalletTest {
     void withdrawAssetWithNoWalletAndInsufficientBalance() {
         fakePlayerWalletRepository.insertAssetAmount(5L, 1, new BigDecimal(0));
         Assertions.assertThrows(InsufficientBalanceException.class,
-                () -> simpleWallet.decreaseAsset(5L, 1, BigDecimal.ONE));
+                () -> innerWallet.decreaseAsset(5L, 1, BigDecimal.ONE));
     }
 }

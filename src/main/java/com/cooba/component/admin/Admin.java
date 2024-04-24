@@ -11,5 +11,5 @@ public interface Admin {
 
     void settleOrders(WinningNumberInfo winningNumberInfo);
 
-    void sendLotteryPrize(long orderId);
+    void  sendLotteryPrize(OrderEntity settledOrder);
 }

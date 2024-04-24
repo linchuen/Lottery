@@ -13,12 +13,12 @@ import com.cooba.object.PlayParameter;
 import com.cooba.object.PlayResult;
 import com.cooba.object.SettleResult;
 import com.cooba.object.WinningNumberInfo;
-import com.cooba.publisher.Publisher;
 import com.cooba.repository.order.OrderRepository;
 import com.cooba.util.GameCodeUtility;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -32,7 +32,6 @@ public class LotterySystem implements Admin {
     private final GameCodeUtility gameCodeUtility;
     private final WalletFactory walletFactory;
     private final OrderRepository orderRepository;
-    private final Publisher settleCompletePublisher;
     private static final BigDecimal feeRate = new BigDecimal("0.02");
 
     @Override
@@ -81,40 +80,31 @@ public class LotterySystem implements Admin {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void settleOrders(WinningNumberInfo winningNumberInfo) {
         int lotteryId = winningNumberInfo.getLotteryId();
         long round = winningNumberInfo.getRound();
         List<Integer> winningNumbers = winningNumberInfo.getWinningNumbers();
 
-        List<OrderEntity> unsettledOrders = orderRepository.selectUnsettleOrder(lotteryId, round);
+        List<OrderEntity> unsettledOrders = orderRepository.selectOrderByStatus(lotteryId, round, OrderStatusEnum.pay);
         for (OrderEntity unsettledOrder : unsettledOrders) {
             long orderId = unsettledOrder.getId();
-            SettleResult settleResult;
             try {
-                settleResult = calculateSettleResult(winningNumbers, unsettledOrder);
+                SettleResult settleResult = calculateSettleResult(winningNumbers, unsettledOrder);
+                orderRepository.updateSettleOrder(orderId, settleResult);
             } catch (Exception e) {
-                log.error(e.getMessage());
+                log.error("結算錯誤 orderId:{} :{}", orderId, e.getMessage());
                 orderRepository.updateSettleFailOrder(orderId);
-                continue;
             }
-            orderRepository.updateSettleOrder(orderId, settleResult);
-            settleCompletePublisher.publishEvent(String.valueOf(orderId));
         }
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void sendLotteryPrize(long orderId) {
-        OrderEntity orderEntity = orderRepository.selectOrderById(orderId).orElseThrow();
-        if (orderEntity.getStatus() != OrderStatusEnum.settle.getCode()) {
-            return;
-        }
-
-        int walletId = orderEntity.getWalletId();
-        long playerId = orderEntity.getPlayerId();
-        int assetId = orderEntity.getAssetId();
-        BigDecimal betPrize = orderEntity.getBetPrize();
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void sendLotteryPrize(OrderEntity settledOrder) {
+        int walletId = settledOrder.getWalletId();
+        long playerId = settledOrder.getPlayerId();
+        int assetId = settledOrder.getAssetId();
+        BigDecimal betPrize = settledOrder.getBetPrize();
 
         Wallet wallet = walletFactory.getWallet(walletId).orElseThrow();
         if (betPrize.compareTo(BigDecimal.ZERO) > 0) {
@@ -124,6 +114,6 @@ public class LotterySystem implements Admin {
                 return;
             }
         }
-        orderRepository.updateAwardOrder(orderEntity.getId());
+        orderRepository.updateAwardOrder(settledOrder.getId());
     }
 }
