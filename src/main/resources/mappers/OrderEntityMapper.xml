@@ -52,9 +52,10 @@
     <insert id="insertInitialOrder" useGeneratedKeys="true" keyProperty="id"
             parameterType="com.cooba.entity.OrderEntity">
         INSERT INTO order_entity
-        (player_id, wallet_id, asset_id, lottery_id, round, game_code, guess_string, bet_amount, odds, bet_prize, fee, status,
+        (order_no, player_id, wallet_id, asset_id, lottery_id, round, game_code, guess_string, bet_amount, odds, bet_prize, fee, status,
         game_status, created_time, updated_time)
         VALUES(
+        #{order.orderNo},
         #{order.playerId},
         #{order.walletId},
         #{order.assetId},
