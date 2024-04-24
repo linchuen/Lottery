@@ -7,6 +7,10 @@ import com.cooba.object.GameInfo;
 import com.cooba.object.PlayParameter;
 import org.springframework.stereotype.Component;
 
+/**
+ * "000" + "0000" + "00" + "2" + "2" + "00"
+ *  彩種     玩法     位置   大小   奇偶   顏色
+ */
 @Component
 public class GameCodeUtility {
 
