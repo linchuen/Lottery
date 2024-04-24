@@ -1,15 +1,12 @@
 package com.cooba.util;
 
 import com.cooba.exception.NoLockException;
-import com.cooba.interfaces.ThrowableRunnable;
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Lock;
 import java.util.function.Supplier;
 
 @Component
@@ -18,34 +15,40 @@ public class RedissonLockUtil implements LockUtil {
     private final RedissonClient redissonClient;
 
     @Override
-    public <T> Optional<T> tryLock(String key, int timeout, TimeUnit timeUnit, int expireTime, Supplier<T> supplier) {
+    public <T> T tryLock(String key, int leaseTime, TimeUnit timeUnit, Supplier<T> supplier) {
         RLock lock = redissonClient.getLock(key);
+
+        long waitTime = timeUnit.toMillis(leaseTime);
         try {
-            if (lock.tryLock(timeout, expireTime, timeUnit)) {
-                return Optional.ofNullable(supplier.get());
+            if (lock.tryLock(waitTime, leaseTime, timeUnit)) {
+                try {
+                   return supplier.get();
+                } finally {
+                    lock.unlock();
+                }
             }
         } catch (InterruptedException e) {
-            return Optional.empty();
+            throw new NoLockException();
         }
-        return Optional.empty();
+        throw new NoLockException();
     }
 
     @Override
-    public void tryLock(String key, int timeout, TimeUnit timeUnit, ThrowableRunnable runnable) throws Exception {
-        Lock lock = redissonClient.getLock(key);
+    public void tryLock(String key, int leaseTime, TimeUnit timeUnit, Runnable runnable) {
+        RLock lock = redissonClient.getLock(key);
 
+        long waitTime = timeUnit.toMillis(leaseTime);
         try {
-            if (lock.tryLock(timeout, timeUnit)) {
+            if (lock.tryLock(waitTime, leaseTime, timeUnit)) {
                 try {
                     runnable.run();
                 } finally {
                     lock.unlock();
                 }
-            } else {
-                throw new NoLockException();
             }
         } catch (InterruptedException e) {
             throw new NoLockException();
         }
+        throw new NoLockException();
     }
 }

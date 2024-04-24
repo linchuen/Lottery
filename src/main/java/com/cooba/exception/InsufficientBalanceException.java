@@ -1,6 +1,6 @@
 package com.cooba.exception;
 
-public class InsufficientBalanceException extends Exception {
+public class InsufficientBalanceException extends RuntimeException {
     public InsufficientBalanceException(){
         super("餘額不足");
     }

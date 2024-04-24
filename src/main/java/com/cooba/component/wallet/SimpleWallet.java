@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -23,29 +22,20 @@ public class SimpleWallet implements Wallet {
     @Override
     public PlayerWalletResult increaseAsset(long playerId, int assetId, BigDecimal amount) {
         String key = this.getWalletEnum().name() + playerId + assetId;
-        PlayerWalletResult.PlayerWalletResultBuilder walletResultBuilder = PlayerWalletResult.builder();
-        try {
-            lockUtil.tryLock(key, 3, TimeUnit.SECONDS, () -> {
-                Optional<BigDecimal> balance = playerWalletRepository.selectAssetAmount(playerId, assetId);
 
-                if (balance.isEmpty()) {
-                    playerWalletRepository.insertAssetAmount(playerId, assetId, amount);
-                    walletResultBuilder.amount(amount);
-                } else {
-                    BigDecimal newBalance = balance.get().add(amount);
-                    playerWalletRepository.updateAssetAmount(playerId, assetId, newBalance);
-                    walletResultBuilder.amount(newBalance);
-                }
-            });
-            return walletResultBuilder
-                    .playerId(playerId)
-                    .walletId(getWalletEnum().getId())
-                    .assetId(assetId)
-                    .build();
-        } catch (Exception e) {
-            log.error("wallet {} {} {} 新增資產失敗 {}", playerId, assetId, amount, e.getMessage());
-            throw new RuntimeException(e);
-        }
+        BigDecimal updatedBalance = lockUtil.tryLock(key, 3, TimeUnit.SECONDS, () -> {
+            BigDecimal balance = playerWalletRepository.selectAssetAmount(playerId, assetId).orElse(BigDecimal.ZERO);
+            BigDecimal newBalance = balance.add(amount);
+            playerWalletRepository.updateAssetAmount(playerId, assetId, newBalance);
+            return newBalance;
+        });
+
+        return PlayerWalletResult.builder()
+                .amount(updatedBalance)
+                .playerId(playerId)
+                .walletId(getWalletEnum().getId())
+                .assetId(assetId)
+                .build();
     }
 
     @Override
@@ -53,24 +43,20 @@ public class SimpleWallet implements Wallet {
         String key = this.getWalletEnum().name() + playerId + assetId;
         PlayerWalletResult.PlayerWalletResultBuilder walletResultBuilder = PlayerWalletResult.builder();
 
-            lockUtil.tryLock(key, 1, TimeUnit.SECONDS, () -> {
-                Optional<BigDecimal> balance = playerWalletRepository.selectAssetAmount(playerId, assetId);
+        BigDecimal updatedBalance = lockUtil.tryLock(key, 1, TimeUnit.SECONDS, () -> {
+            BigDecimal balance = playerWalletRepository.selectAssetAmount(playerId, assetId)
+                    .orElseThrow(InsufficientBalanceException::new);
 
-                if (balance.isEmpty()) {
-                    throw new InsufficientBalanceException();
-                } else {
-                    BigDecimal newBalance = balance.get().subtract(amount);
+            BigDecimal newBalance = balance.subtract(amount);
+            if (newBalance.compareTo(BigDecimal.ZERO) < 0) {
+                throw new InsufficientBalanceException();
+            }
+            playerWalletRepository.updateAssetAmount(playerId, assetId, newBalance);
+            return newBalance;
+        });
 
-                    if (newBalance.compareTo(BigDecimal.ZERO) < 0) {
-                        throw new InsufficientBalanceException();
-                    }
-                    playerWalletRepository.updateAssetAmount(playerId, assetId, newBalance);
-                    walletResultBuilder.amount(newBalance);
-                }
-            });
-
-
-        return walletResultBuilder
+        return PlayerWalletResult.builder()
+                .amount(updatedBalance)
                 .playerId(playerId)
                 .walletId(getWalletEnum().getId())
                 .assetId(assetId)
