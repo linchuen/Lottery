@@ -7,5 +7,7 @@ public interface Order {
 
     OrderEntity generate(BetRequest betRequest);
 
-    boolean valid(OrderEntity orderEntity);
+    boolean verify(OrderEntity orderEntity);
+
+    String generateOrderNo();
 }

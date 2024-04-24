@@ -26,10 +26,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -52,7 +48,7 @@ class GuestTest {
     public void betWithOrderNotValid() {
         BetRequest testBetRequest = new BetRequest();
         testBetRequest.setPlayerId(1);
-        Mockito.when(order.valid(any(OrderEntity.class))).thenReturn(false);
+        Mockito.when(order.verify(any(OrderEntity.class))).thenReturn(false);
 
         Assertions.assertThrows(RuntimeException.class, () -> guest.bet(testBetRequest));
     }
@@ -67,7 +63,7 @@ class GuestTest {
         OrderEntity testOrder = new OrderEntity();
 
         Mockito.when(order.generate(testBetRequest)).thenReturn(testOrder);
-        Mockito.when(order.valid(any(OrderEntity.class))).thenReturn(true);
+        Mockito.when(order.verify(any(OrderEntity.class))).thenReturn(true);
         Mockito.when(walletFactory.getWallet(anyInt())).thenReturn(Optional.of(wallet));
         Mockito.doThrow(new InsufficientBalanceException())
                 .when(wallet).decreaseAsset(anyLong(), anyInt(), any(BigDecimal.class));
@@ -85,7 +81,7 @@ class GuestTest {
         OrderEntity testOrder = new OrderEntity();
 
         Mockito.when(order.generate(testBetRequest)).thenReturn(testOrder);
-        Mockito.when(order.valid(any(OrderEntity.class))).thenReturn(true);
+        Mockito.when(order.verify(any(OrderEntity.class))).thenReturn(true);
         Mockito.when(walletFactory.getWallet(anyInt())).thenReturn(Optional.of(wallet));
 
         BetResult betResult = guest.bet(testBetRequest);

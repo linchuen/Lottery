@@ -40,7 +40,7 @@ class LotteryOrderTest {
         OrderEntity testOrder = new OrderEntity();
         testOrder.setWalletId(0);
 
-        boolean result = lotteryOrder.valid(testOrder);
+        boolean result = lotteryOrder.verify(testOrder);
 
         Assertions.assertFalse(result,"Wallet不匹配");
     }
@@ -51,7 +51,7 @@ class LotteryOrderTest {
         testOrder.setWalletId(WalletEnum.INNER.getId());
         testOrder.setBetAmount(BigDecimal.ZERO);
 
-        boolean result = lotteryOrder.valid(testOrder);
+        boolean result = lotteryOrder.verify(testOrder);
 
         Assertions.assertFalse(result,"BetAmount應大於0");
     }
@@ -69,7 +69,7 @@ class LotteryOrderTest {
         testOrder.setBetAmount(BigDecimal.ONE);
         testOrder.setGameCode(gameCode);
 
-        boolean result = lotteryOrder.valid(testOrder);
+        boolean result = lotteryOrder.verify(testOrder);
 
         Assertions.assertFalse(result,"Lottery不得為空");
     }
@@ -87,7 +87,7 @@ class LotteryOrderTest {
         testOrder.setBetAmount(BigDecimal.ONE);
         testOrder.setGameCode(gameCode);
 
-        boolean result = lotteryOrder.valid(testOrder);
+        boolean result = lotteryOrder.verify(testOrder);
 
         Assertions.assertFalse(result,"GameRule不得為空");
     }
@@ -108,7 +108,7 @@ class LotteryOrderTest {
         Mockito.when(lotteryFactory.getLottery(LotteryEnum.MarkSix.getId())).thenReturn(Optional.ofNullable(lottery));
         Mockito.when(lottery.calculateNextRound(any(LocalDateTime.class))).thenReturn(2L);
 
-        boolean result = lotteryOrder.valid(testOrder);
+        boolean result = lotteryOrder.verify(testOrder);
 
         Assertions.assertFalse(result,"測試期數應不相等");
     }
@@ -134,7 +134,7 @@ class LotteryOrderTest {
         Mockito.when(lottery.calculateNextRound(any(LocalDateTime.class))).thenReturn(1L);
         Mockito.when(lottery.calculateNextRoundTime(any(LocalDateTime.class))).thenReturn(LocalDateTime.now().plusSeconds(10));
 
-        boolean result = lotteryOrder.valid(testOrder);
+        boolean result = lotteryOrder.verify(testOrder);
 
         Assertions.assertFalse(result,"下注結束前10秒為封盤時間");
     }
@@ -159,7 +159,7 @@ class LotteryOrderTest {
         Mockito.when(lottery.calculateNextRound(any(LocalDateTime.class))).thenReturn(1L);
         Mockito.when(lottery.calculateNextRoundTime(any(LocalDateTime.class))).thenReturn(LocalDateTime.now().plusSeconds(11));
 
-        boolean result = lotteryOrder.valid(testOrder);
+        boolean result = lotteryOrder.verify(testOrder);
 
         Assertions.assertTrue(result);
     }

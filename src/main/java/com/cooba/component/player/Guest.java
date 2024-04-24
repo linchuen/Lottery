@@ -5,7 +5,6 @@ import com.cooba.component.wallet.Wallet;
 import com.cooba.component.wallet.WalletFactory;
 import com.cooba.entity.OrderEntity;
 import com.cooba.enums.AssetEnum;
-import com.cooba.enums.OrderStatusEnum;
 import com.cooba.enums.WalletEnum;
 import com.cooba.exception.InsufficientBalanceException;
 import com.cooba.object.BetResult;
@@ -15,9 +14,9 @@ import com.cooba.repository.order.OrderRepository;
 import com.cooba.request.BetRequest;
 import com.cooba.request.CreatePlayerRequest;
 import com.cooba.request.WalletRequest;
-import com.cooba.util.LockUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +31,7 @@ public class Guest implements Player {
     private final Order order;
     private final WalletFactory walletFactory;
     private final OrderRepository orderRepository;
-    private final LockUtil lockUtil;
+    private final RedisTemplate<String,String> redisTemplate;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -59,8 +58,7 @@ public class Guest implements Player {
         long playerId = betRequest.getPlayerId();
 
         OrderEntity newOrder = order.generate(betRequest);
-
-        if (!order.valid(newOrder)) {
+        if (!order.verify(newOrder)) {
             throw new RuntimeException("驗證失敗");
         }
         long orderId = orderRepository.insertNewOrder(newOrder);
