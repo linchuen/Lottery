@@ -1,5 +1,6 @@
 CREATE TABLE `order_entity` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `order_no` varchar(50) DEFAULT NULL,
   `player_id` bigint(20) DEFAULT NULL,
   `wallet_id` int(11) DEFAULT NULL,
   `asset_id` int(11) DEFAULT NULL,
@@ -15,5 +16,8 @@ CREATE TABLE `order_entity` (
   `game_status` int(11) DEFAULT NULL,
   `created_time` datetime DEFAULT NULL,
   `updated_time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `order_entity_order_no_IDX` (`order_no`) USING BTREE,
+  KEY `order_entity_created_time_IDX` (`created_time`) USING BTREE,
+  KEY `order_entity_player_id_IDX` (`player_id`,`lottery_id`,`asset_id`,`round`,`created_time`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

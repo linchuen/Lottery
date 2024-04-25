@@ -22,9 +22,6 @@ public class ColorRule implements PlayRule {
     private final BigDecimal blueOdds = new BigDecimal("2.81");// 45 / 16
     private final BigDecimal greenOdds = new BigDecimal("2.81");// 45 / 16
 
-    public static void main(String[] args) {
-        System.out.println(Stream.of(5, 6, 11, 16, 17, 21, 22, 27, 28, 32, 33, 38, 39, 43, 44, 49).toList().size());
-    }
     @Override
     public PlayResult decideResult(List<Integer> winningNumbers, List<Integer> guessNumbers, PlayParameter playParameter) {
         int specialNumber = winningNumbers.get(6);
