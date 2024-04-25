@@ -29,8 +29,8 @@ public class GameCodeUtility {
                 .gameRuleId(gameRuleId)
                 .playParameter(PlayParameter.builder()
                         .position(position == 0 ? null : position)
-                        .isBig(isBig == 2 ? null : isBig == 1)
-                        .isOdd(isOdd == 2 ? null : isOdd == 1)
+                        .isBig(isBig == 0 ? null : isBig == 1)
+                        .isOdd(isOdd == 0 ? null : isOdd == 1)
                         .color(color == 0 ? null : ColorEnum.getColorById(color))
                         .build())
                 .build();
@@ -49,11 +49,11 @@ public class GameCodeUtility {
     }
 
     public String getIsBigCode(Boolean isBig) {
-        return isBig == null ? "2" : isBig ? "1" : "0";
+        return isBig == null ? "0" : isBig ? "1" : "2";
     }
 
     public String getIsOddCode(Boolean isOdd) {
-        return isOdd == null ? "2" : isOdd ? "1" : "0";
+        return isOdd == null ? "0" : isOdd ? "1" : "2";
     }
 
     public String getColorCode(ColorEnum colorEnum) {
