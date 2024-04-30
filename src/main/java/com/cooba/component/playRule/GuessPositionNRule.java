@@ -8,10 +8,11 @@ import com.cooba.object.WinResult;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 @Component
 public class GuessPositionNRule implements PlayRule {
-    private final BigDecimal odds = new BigDecimal("45");// 45 / 1
+    private final BigDecimal odds =  BigDecimal.valueOf(45).divide(BigDecimal.valueOf(1),2, RoundingMode.DOWN);// 45 / 1
 
     @Override
     public PlayResult decideResult(List<Integer> winningNumbers, List<Integer> guessNumbers, PlayParameter playParameter) {

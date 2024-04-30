@@ -5,18 +5,27 @@ import com.cooba.object.LoseResult;
 import com.cooba.object.PlayParameter;
 import com.cooba.object.PlayResult;
 import com.cooba.object.WinResult;
+import com.cooba.util.CombinationUtil;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
+
 @Component
 public class SelectNNotMatchRule implements PlayRule {
-    private final BigDecimal select2NotMatchOdds = new BigDecimal("1.33");// C(45,2) / C(39,2)
-    private final BigDecimal select3NotMatchOdds = new BigDecimal("1.55");// C(45,3) / C(39,3)
-    private final BigDecimal select4NotMatchOdds = new BigDecimal("1.81");// C(45,4) / C(39,4)
-    private final BigDecimal select5NotMatchOdds = new BigDecimal("2.12");// C(45,5) / C(39,5)
-    private final BigDecimal select6NotMatchOdds = new BigDecimal("2.49");// C(45,6) / C(39,6)
-    private final BigDecimal select7NotMatchOdds = new BigDecimal("2.95");// C(45,7) / C(39,7)
+    private final BigDecimal select2NotMatchOdds = BigDecimal.valueOf(CombinationUtil.c(45, 2))
+            .divide(BigDecimal.valueOf(CombinationUtil.c(39, 2)), 2, RoundingMode.DOWN);// C(45,2) / C(39,2)
+    private final BigDecimal select3NotMatchOdds = BigDecimal.valueOf(CombinationUtil.c(45, 3))
+            .divide(BigDecimal.valueOf(CombinationUtil.c(39, 3)), 2, RoundingMode.DOWN);// C(45,3) / C(39,3)
+    private final BigDecimal select4NotMatchOdds = BigDecimal.valueOf(CombinationUtil.c(45, 4))
+            .divide(BigDecimal.valueOf(CombinationUtil.c(39, 4)), 2, RoundingMode.DOWN);// C(45,4) / C(39,4)
+    private final BigDecimal select5NotMatchOdds =BigDecimal.valueOf(CombinationUtil.c(45, 5))
+            .divide(BigDecimal.valueOf(CombinationUtil.c(39, 5)), 2, RoundingMode.DOWN);// C(45,5) / C(39,5)
+    private final BigDecimal select6NotMatchOdds = BigDecimal.valueOf(CombinationUtil.c(45, 6))
+            .divide(BigDecimal.valueOf(CombinationUtil.c(39, 6)), 2, RoundingMode.DOWN);// C(45,6) / C(39,6)
+    private final BigDecimal select7NotMatchOdds = BigDecimal.valueOf(CombinationUtil.c(45, 7))
+            .divide(BigDecimal.valueOf(CombinationUtil.c(39, 7)), 2, RoundingMode.DOWN);// C(45,7) / C(39,7)
 
 
     @Override

@@ -9,6 +9,7 @@ import com.cooba.object.WinResult;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -18,9 +19,9 @@ public class ColorRule implements PlayRule {
     private final List<Integer> blueBalls = Stream.of(3, 4, 9, 10, 14, 15, 20, 25, 26, 31, 36, 37, 41, 42, 47, 48).toList();
     private final List<Integer> greenBalls = Stream.of(5, 6, 11, 16, 17, 21, 22, 27, 28, 32, 33, 38, 39, 43, 44, 49).toList();
 
-    private final BigDecimal redOdds = new BigDecimal("2.64");// 45 / 17
-    private final BigDecimal blueOdds = new BigDecimal("2.81");// 45 / 16
-    private final BigDecimal greenOdds = new BigDecimal("2.81");// 45 / 16
+    private final BigDecimal redOdds = BigDecimal.valueOf(45).divide(BigDecimal.valueOf(17),2, RoundingMode.DOWN);// 45 / 17
+    private final BigDecimal blueOdds = BigDecimal.valueOf(45).divide(BigDecimal.valueOf(16),2, RoundingMode.DOWN);// 45 / 16
+    private final BigDecimal greenOdds = BigDecimal.valueOf(45).divide(BigDecimal.valueOf(16),2, RoundingMode.DOWN);// 45 / 16
 
     @Override
     public PlayResult decideResult(List<Integer> winningNumbers, List<Integer> guessNumbers, PlayParameter playParameter) {
